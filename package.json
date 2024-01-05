@@ -1,0 +1,26 @@
+{
+  "name": "wispr-backend",
+  "version": "1.0.0",
+  "description": "backend for Wispr realtime chatting app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js"
+  },
+  "keywords": [
+    "socket",
+    "express"
+  ],
+  "author": "Kartikey Shukla",
+  "license": "ISC",
+  "dependencies": {
+    "async-handler": "^0.0.3",
+    "colors": "^1.4.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.3",
+    "nodemon": "^3.0.2"
+  }
+}
