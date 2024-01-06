@@ -1,10 +1,9 @@
-const apiResponse = (message, data) => {
-  const response = {
+const apiResponse = (res, statusCode, message, data) => {
+  res.status(statusCode || 200).json({
     message: message || 'OK',
     data,
     success: true,
-  };
-  return response;
+  });
 };
 
 module.exports = apiResponse;

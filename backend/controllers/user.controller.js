@@ -1,6 +1,10 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 const apiResponse = require('../utils/apiResponse');
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require('../utils/generateToken');
 
 /**
  * POST /api/users
@@ -26,14 +30,15 @@ const register = asyncHandler(async (req, res) => {
 
   const user = await User.create({ username, email, password });
 
+  generateAccessToken(res, user);
+  generateRefreshToken(res, user);
+
   if (user) {
-    res.status(201).json(
-      apiResponse('Success! Your account is now active.', {
-        _id: user.id,
-        username: user.username,
-        email: user.email,
-      })
-    );
+    apiResponse(res, 201, 'Success! Your account is now active.', {
+      _id: user.id,
+      username: user.username,
+      email: user.email,
+    });
   } else {
     throw new Error('Something went wrong on our end');
   }
