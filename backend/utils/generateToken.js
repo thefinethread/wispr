@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const options = {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
-  sameSite: true,
 };
 
 const generateAccessToken = (res, user) => {
@@ -38,6 +37,8 @@ const generateRefreshToken = (res, user) => {
     ...options,
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   });
+
+  return token;
 };
 
 module.exports = { generateAccessToken, generateRefreshToken };
