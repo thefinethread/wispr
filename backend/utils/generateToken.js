@@ -25,7 +25,6 @@ const generateRefreshToken = (res, user) => {
     {
       _id: user._id,
       email: user.email,
-      username: user.username,
     },
     process.env.JWT_SECRET,
     {

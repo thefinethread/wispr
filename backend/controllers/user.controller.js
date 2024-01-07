@@ -39,10 +39,9 @@ const register = asyncHandler(async (req, res) => {
 
   const user = await User.create({ username, email, password });
 
-  generateAccessToken(res, user);
-  generateRefreshToken(res, user);
-
   if (user) {
+    await generateTokens(res, user);
+
     apiResponse(res, 201, 'Success! Your account is now active.', {
       _id: user.id,
       username: user.username,
@@ -67,7 +66,7 @@ const login = asyncHandler(async (req, res) => {
   }
 
   const user = await User.findOne({ email });
-  console.log(user);
+
   if (!user || !(await user.validatePassword(password))) {
     res.status(401);
     throw new Error('Invalid email or password');
@@ -82,4 +81,19 @@ const login = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { register, login };
+/**
+ * POST /api/users/logout
+ * logout user
+ * private
+ */
+const logout = asyncHandler(async (req, res) => {
+  // clear cookies
+  res.clearCookie('accessToken').clearCookie('refreshToken');
+
+  // remove refresh token from db
+  await User.updateOne({ _id: req.user._id }, { refreshToken: null });
+
+  apiResponse(res, 200, 'Logged out successfully');
+});
+
+module.exports = { register, login, logout };
