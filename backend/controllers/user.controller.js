@@ -96,4 +96,10 @@ const logout = asyncHandler(async (req, res) => {
   apiResponse(res, 200, 'Logged out successfully');
 });
 
-module.exports = { register, login, logout };
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  generateAccessToken(res, req.user);
+
+  apiResponse(res, 200, 'Access token refreshed');
+});
+
+module.exports = { register, login, logout, refreshAccessToken };
