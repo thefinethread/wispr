@@ -1,4 +1,5 @@
 const asyncHandler = require('express-async-handler');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const apiResponse = require('../utils/apiResponse');
 const {
@@ -91,15 +92,52 @@ const logout = asyncHandler(async (req, res) => {
   res.clearCookie('accessToken').clearCookie('refreshToken');
 
   // remove refresh token from db
-  await User.updateOne({ _id: req.user._id }, { refreshToken: null });
+  await User.updateOne({ _id: req.user._id }, { $unset: { refreshToken: 1 } });
 
   apiResponse(res, 200, 'Logged out successfully');
 });
 
+/**
+ * POST /api/users/refresh-token
+ * refresh the access token
+ */
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  generateAccessToken(res, req.user);
+  const { refreshToken } = req.cookies;
 
-  apiResponse(res, 200, 'Access token refreshed');
+  if (!refreshToken) {
+    res.status(401);
+    throw new Error('Unauthorized - no refresh token');
+  }
+
+  const decoded = jwt.verify(
+    refreshToken,
+    process.env.JWT_SECRET,
+    (err, tokenRes) => {
+      if (err) {
+        res.status(401);
+
+        throw err.name === 'TokenExpiredError'
+          ? new Error('Unauthorized - refresh token is expired')
+          : new Error('Unauthorized - ' + err.message);
+      }
+      return tokenRes;
+    }
+  );
+
+  const user = await User.findById(decoded?._id).select('-password');
+
+  if (!user) {
+    res.status(401);
+    throw new Error('Unauthorized - user not found');
+  }
+
+  if (user?.refreshToken === refreshToken) {
+    generateAccessToken(res, user);
+    apiResponse(res, 200, 'Access token refreshed');
+  } else {
+    res.status(401);
+    throw new Error('Unauthorized - invalid refresh token');
+  }
 });
 
 module.exports = { register, login, logout, refreshAccessToken };
