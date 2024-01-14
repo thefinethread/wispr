@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
 import UnderlineLink from "../../commonComponents/styledComponents/UnderlineLink";
 import GooglePng from "../../assets/images/google.png";
 import Button from "../../commonComponents/Buttons/Button";
 import Input from "../../commonComponents/Input/Input";
 import FormControlStyled from "../../commonComponents/styledComponents/FormControlStyled";
+import useInput from "../../hooks/useInput";
 
 const formFields = [
   {
@@ -24,14 +24,62 @@ const formFields = [
 ];
 
 const SignUpForm = () => {
+  const {
+    value: enteredUsername,
+    inputBlurHandler: usernameBlurHandler,
+    valueChangeHandler: usernameChangeHandler,
+  } = useInput();
+
+  const {
+    value: enteredEmail,
+    inputBlurHandler: emailBlurHandler,
+    valueChangeHandler: emailChangeHandler,
+  } = useInput();
+
+  const {
+    value: enteredPassword,
+    inputBlurHandler: passwordBlurHandler,
+    valueChangeHandler: passwordChangeHandler,
+  } = useInput();
+
   return (
     <div className="p-14 text-sm font-light">
-      <form className="">
-        {formFields.map((field) => (
+      <form>
+        {/* {formFields.map((field) => (
           <FormControlStyled key={field.name}>
             <Input placeholder={field.placeholder} />
           </FormControlStyled>
-        ))}
+        ))} */}
+        <FormControlStyled>
+          <Input
+            value={enteredUsername}
+            onChange={usernameChangeHandler}
+            onBlur={usernameBlurHandler}
+            placeholder="Username"
+            name="username"
+            type="text"
+          />
+        </FormControlStyled>
+        <FormControlStyled>
+          <Input
+            value={enteredEmail}
+            onChange={emailChangeHandler}
+            onBlur={emailBlurHandler}
+            placeholder="Email"
+            name="email"
+            type="email"
+          />
+        </FormControlStyled>
+        <FormControlStyled>
+          <Input
+            value={enteredPassword}
+            onChange={passwordChangeHandler}
+            onBlur={passwordBlurHandler}
+            placeholder="Password"
+            name="password"
+            type="password"
+          />
+        </FormControlStyled>
         <Button type="submit">Sign Up</Button>
       </form>
       <div className="my-4 text-[13px] font-normal text-zinc-500">
@@ -45,7 +93,7 @@ const SignUpForm = () => {
       <div className="mt">
         <Button version="secondary">
           <img className="h-6 w-6" src={GooglePng} alt="" />
-          Login with Google
+          Continue with Google
         </Button>
       </div>
     </div>
