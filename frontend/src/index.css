@@ -8,10 +8,10 @@
 @layer base {
   :root {
     --color-text-base: 0, 0, 0;
-    --color-text-muted: rgb(67, 67, 67);
-    --color-primary: #0084ff;
-    --color-accent: rgb(141, 195, 246);
-    --color-chat-accent: rgb(0, 132, 255);
-    --color-chat-received: rgb(211, 211, 211);
+    --color-text-muted: 110, 110, 110;
+    --color-primary: 0, 132, 255;
+    --color-accent: 141, 195, 246;
+    --color-chat-accent: 0, 132, 255;
+    --color-chat-received: 211, 211, 211;
   }
 }
