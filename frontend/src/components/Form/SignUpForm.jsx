@@ -5,51 +5,67 @@ import Input from "../../commonComponents/Input/Input";
 import FormControlStyled from "../../commonComponents/styledComponents/FormControlStyled";
 import useInput from "../../hooks/useInput";
 
-const formFields = [
-  {
-    placeholder: "Username",
-    name: "username",
-    type: "text",
-  },
-  {
-    placeholder: "Email",
-    name: "email",
-    type: "email",
-  },
-  {
-    placeholder: "Password",
-    name: "password",
-    type: "password",
-  },
-];
+let usernameContent = "";
+let emailContent = "";
+let passwordContent = "";
+
+const usernameCheck = (value) => {
+  if (value.trim() === "") {
+    usernameContent = "Username is required";
+  } else {
+    return value;
+  }
+};
+
+const emailCheck = (value) => {
+  if (value.trim() === "") {
+    emailContent = "Email is required";
+  } else if (!value.includes("@") || !value.includes(".")) {
+    emailContent = "Email is invalid";
+  } else {
+    return value;
+  }
+};
+
+const passwordCheck = (value) => {
+  if (value.trim() === "") {
+    passwordContent = "Password is required";
+  } else if (value.trim()?.length < 4) {
+    passwordContent = "Password must contain at least 4 characters";
+  } else {
+    return value;
+  }
+};
+
+const ValidationMessage = ({ msg }) => {
+  return <p className="mt-0.5 text-xs font-normal text-red-600">{msg}</p>;
+};
 
 const SignUpForm = () => {
   const {
     value: enteredUsername,
     inputBlurHandler: usernameBlurHandler,
     valueChangeHandler: usernameChangeHandler,
-  } = useInput();
+    hasError: usernameHasError,
+  } = useInput(usernameCheck);
 
   const {
     value: enteredEmail,
     inputBlurHandler: emailBlurHandler,
     valueChangeHandler: emailChangeHandler,
-  } = useInput();
+    hasError: emailHasError,
+  } = useInput(emailCheck);
 
   const {
     value: enteredPassword,
     inputBlurHandler: passwordBlurHandler,
     valueChangeHandler: passwordChangeHandler,
-  } = useInput();
+    hasError: passwordHasError,
+  } = useInput(passwordCheck);
 
   return (
     <div className="p-14 text-sm font-light">
       <form>
-        {/* {formFields.map((field) => (
-          <FormControlStyled key={field.name}>
-            <Input placeholder={field.placeholder} />
-          </FormControlStyled>
-        ))} */}
         <FormControlStyled>
           <Input
             value={enteredUsername}
@@ -58,7 +74,10 @@ const SignUpForm = () => {
             placeholder="Username"
             name="username"
             type="text"
+            error={usernameHasError}
+            required={true}
           />
+          {usernameHasError && <ValidationMessage msg={usernameContent} />}
         </FormControlStyled>
         <FormControlStyled>
           <Input
@@ -68,7 +87,10 @@ const SignUpForm = () => {
             placeholder="Email"
             name="email"
             type="email"
+            error={emailHasError}
+            required={true}
           />
+          {emailHasError && <ValidationMessage msg={emailContent} />}
         </FormControlStyled>
         <FormControlStyled>
           <Input
@@ -78,7 +100,10 @@ const SignUpForm = () => {
             placeholder="Password"
             name="password"
             type="password"
+            error={passwordHasError}
+            required={true}
           />
+          {passwordHasError && <ValidationMessage msg={passwordContent} />}
         </FormControlStyled>
         <Button type="submit">Sign Up</Button>
       </form>

@@ -1,5 +1,5 @@
 const FormControlStyled = ({ children }) => {
-  return <div className="mb-2">{children}</div>;
+  return <div className="mb-4">{children}</div>;
 };
 
 export default FormControlStyled;
