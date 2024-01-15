@@ -4,68 +4,62 @@ import Button from "../../commonComponents/Buttons/Button";
 import Input from "../../commonComponents/Input/Input";
 import FormControlStyled from "../../commonComponents/styledComponents/FormControlStyled";
 import useInput from "../../hooks/useInput";
-
-let usernameContent = "";
-let emailContent = "";
-let passwordContent = "";
-
-const usernameCheck = (value) => {
-  if (value.trim() === "") {
-    usernameContent = "Username is required";
-  } else {
-    return value;
-  }
-};
-
-const emailCheck = (value) => {
-  if (value.trim() === "") {
-    emailContent = "Email is required";
-  } else if (!value.includes("@") || !value.includes(".")) {
-    emailContent = "Email is invalid";
-  } else {
-    return value;
-  }
-};
-
-const passwordCheck = (value) => {
-  if (value.trim() === "") {
-    passwordContent = "Password is required";
-  } else if (value.trim()?.length < 4) {
-    passwordContent = "Password must contain at least 4 characters";
-  } else {
-    return value;
-  }
-};
-
-const ValidationMessage = ({ msg }) => {
-  return <p className="mt-0.5 text-xs font-normal text-red-600">{msg}</p>;
-};
+import {
+  usernameCheck,
+  passwordCheck,
+  emailCheck,
+} from "../../utils/form/formFieldsValidation";
+import ValidationMessage from "../../commonComponents/styledComponents/ValidationMessage";
 
 const SignUpForm = () => {
+  let formIsValid = false;
+
   const {
     value: enteredUsername,
+    isValid: isUsernameValid,
     inputBlurHandler: usernameBlurHandler,
     valueChangeHandler: usernameChangeHandler,
     hasError: usernameHasError,
+    validationText: usernameContent,
   } = useInput(usernameCheck);
 
   const {
     value: enteredEmail,
+    isValid: isEmailValid,
     inputBlurHandler: emailBlurHandler,
     valueChangeHandler: emailChangeHandler,
     hasError: emailHasError,
+    validationText: emailContent,
   } = useInput(emailCheck);
 
   const {
     value: enteredPassword,
+    isValid: isPasswordValid,
     inputBlurHandler: passwordBlurHandler,
     valueChangeHandler: passwordChangeHandler,
     hasError: passwordHasError,
+    validationText: passwordContent,
   } = useInput(passwordCheck);
+
+  if (isUsernameValid && isEmailValid && isPasswordValid) {
+    formIsValid = true;
+  } else {
+    formIsValid = false;
+  }
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+
+    if (!formIsValid) {
+      return;
+    }
+
+    console.log(enteredUsername, enteredEmail, enteredPassword);
+  };
 
   return (
     <div className="p-14 text-sm font-light">
-      <form>
+      <form onSubmit={handleSignUp}>
         <FormControlStyled>
           <Input
             value={enteredUsername}
@@ -105,7 +99,9 @@ const SignUpForm = () => {
           />
           {passwordHasError && <ValidationMessage msg={passwordContent} />}
         </FormControlStyled>
-        <Button type="submit">Sign Up</Button>
+        <Button type="submit" disabled={!formIsValid}>
+          Sign Up
+        </Button>
       </form>
       <div className="my-4 text-[13px] font-normal text-zinc-500">
         <UnderlineLink className="after:h-[1px]">
