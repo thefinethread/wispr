@@ -11,13 +11,13 @@ const Modal = ({ isModalOpen, handleCloseModal, children }) => {
   };
 
   return isModalOpen ? (
-    <div className="fixed left-0 top-0 z-10 h-full w-full backdrop-blur-sm  backdrop-brightness-50 ">
+    <div className="fixed left-0 top-0 z-10 h-full w-full backdrop-blur-sm backdrop-brightness-50 ">
       <div
         onClick={checkModalOverlay}
         ref={modalOverlayRef}
         className="flex h-full items-center justify-center"
       >
-        <div className="relative flex h-auto items-center justify-center rounded-lg bg-white">
+        <div className="relative flex h-auto max-w-[430px]  items-center justify-center rounded-lg bg-white">
           <RiCloseFill
             onClick={handleCloseModal}
             size="1.6rem"

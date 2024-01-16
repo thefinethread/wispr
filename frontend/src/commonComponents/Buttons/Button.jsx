@@ -16,7 +16,7 @@ const Button = ({
     <button
       disabled={disabled}
       type={type}
-      className={`flex   w-full items-center justify-center gap-4 rounded-md px-6 py-2 text-sm text-zinc-50 ${
+      className={`flex h-10 w-full items-center justify-center gap-4 rounded-md px-6 text-sm text-zinc-50 ${
         version === "primary" ? primaryStyles : secondaryStyles
       } ${disabledStyles} ${className}`}
     >

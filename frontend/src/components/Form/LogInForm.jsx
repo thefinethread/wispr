@@ -70,9 +70,7 @@ const LogInForm = () => {
             required={true}
           />
         </FormControlStyled>
-        <Button type="submit" disabled={!formIsValid}>
-          Log In
-        </Button>
+        <Button type="submit" disabled={!formIsValid}></Button>
       </form>
       <div className="my-4 text-[13px] font-normal text-zinc-500">
         <UnderlineLink className="after:h-[1px]">

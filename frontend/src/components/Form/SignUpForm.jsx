@@ -1,3 +1,7 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { register } from "../../features/auth/authService";
 import UnderlineLink from "../../commonComponents/styledComponents/UnderlineLink";
 import GooglePng from "../../assets/images/google.png";
 import Button from "../../commonComponents/Buttons/Button";
@@ -10,8 +14,18 @@ import {
   emailCheck,
 } from "../../utils/form/formFieldsValidation";
 import ValidationMessage from "../../commonComponents/styledComponents/ValidationMessage";
+import Spinner from "../../commonComponents/Spinners/Spinner";
+import ErrorMessage from "../../commonComponents/styledComponents/ErrorMessage";
+import { reset } from "../../features/auth/authSlice";
 
 const SignUpForm = () => {
+  const { loading, user, hasError, message, success } = useSelector(
+    (state) => state.auth,
+  );
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   let formIsValid = false;
 
   const {
@@ -21,6 +35,7 @@ const SignUpForm = () => {
     valueChangeHandler: usernameChangeHandler,
     hasError: usernameHasError,
     validationText: usernameContent,
+    resetInput: resetUsernameInput,
   } = useInput(usernameCheck);
 
   const {
@@ -30,6 +45,7 @@ const SignUpForm = () => {
     valueChangeHandler: emailChangeHandler,
     hasError: emailHasError,
     validationText: emailContent,
+    resetInput: resetEmailInput,
   } = useInput(emailCheck);
 
   const {
@@ -39,6 +55,7 @@ const SignUpForm = () => {
     valueChangeHandler: passwordChangeHandler,
     hasError: passwordHasError,
     validationText: passwordContent,
+    resetInput: resetPasswordInput,
   } = useInput(passwordCheck);
 
   if (isUsernameValid && isEmailValid && isPasswordValid) {
@@ -54,8 +71,28 @@ const SignUpForm = () => {
       return;
     }
 
-    console.log(enteredUsername, enteredEmail, enteredPassword);
+    dispatch(
+      register({
+        username: enteredUsername,
+        email: enteredEmail,
+        password: enteredPassword,
+      }),
+    );
   };
+
+  const resetInputs = () => {
+    resetUsernameInput();
+    resetEmailInput();
+    resetPasswordInput();
+  };
+
+  useEffect(() => {
+    if (success) {
+      resetInputs();
+      dispatch(reset());
+      navigate("/chats");
+    }
+  }, [success]);
 
   return (
     <div className="p-14 text-sm font-light">
@@ -99,8 +136,13 @@ const SignUpForm = () => {
           />
           {passwordHasError && <ValidationMessage msg={passwordContent} />}
         </FormControlStyled>
+        {hasError && (
+          <FormControlStyled>
+            <ErrorMessage>{message}</ErrorMessage>
+          </FormControlStyled>
+        )}
         <Button type="submit" disabled={!formIsValid}>
-          Sign Up
+          {loading ? <Spinner /> : "Sign Up"}
         </Button>
       </form>
       <div className="my-4 text-[13px] font-normal text-zinc-500">
