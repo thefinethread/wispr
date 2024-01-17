@@ -13,7 +13,7 @@ const Input = ({
     : "outline-1 outline-zinc-200";
   return (
     <input
-      className={`w-80 rounded-sm px-4 py-2 text-sm font-light outline ${errorStyles}`}
+      className={`w-80 rounded-sm px-4 py-2 text-sm font-normal text-zinc-600 outline placeholder:font-light ${errorStyles}`}
       type={type}
       placeholder={placeholder}
       name={name}
