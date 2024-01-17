@@ -9,15 +9,24 @@ import {
   emailCheck,
 } from "../../utils/form/formFieldsValidation";
 import ValidationMessage from "../../commonComponents/styledComponents/ValidationMessage";
+import { useLoginMutation } from "../../features/user/usersApiSlice";
+import { useNavigate } from "react-router-dom";
+import Spinner from "../../commonComponents/Spinners/Spinner";
+import ErrorMessage from "../../commonComponents/styledComponents/ErrorMessage";
 
-const LogInForm = () => {
+const LogInForm = ({ closeModal }) => {
   let formIsValid = false;
+
+  const navigate = useNavigate();
+
+  const [login, { isLoading, isError, error }] = useLoginMutation();
 
   const {
     value: enteredEmail,
     isValid: isEmailValid,
     inputBlurHandler: emailBlurHandler,
     valueChangeHandler: emailChangeHandler,
+    resetInput: resetEmailInput,
     hasError: emailHasError,
     validationText: emailContent,
   } = useInput(emailCheck);
@@ -26,6 +35,7 @@ const LogInForm = () => {
     value: enteredPassword,
     isValid: isPasswordValid,
     valueChangeHandler: passwordChangeHandler,
+    resetInput: resetPasswordInput,
   } = useInput(passwordCheck);
 
   if (isEmailValid && isPasswordValid) {
@@ -34,14 +44,26 @@ const LogInForm = () => {
     formIsValid = false;
   }
 
-  const handleLogIn = (e) => {
+  const resetInputs = () => {
+    resetEmailInput();
+    resetPasswordInput();
+  };
+
+  const handleLogIn = async (e) => {
     e.preventDefault();
 
     if (!formIsValid) {
       return;
     }
 
-    console.log(enteredEmail, enteredPassword);
+    try {
+      await login({ email: enteredEmail, password: enteredPassword }).unwrap();
+      resetInputs();
+      closeModal();
+      navigate("/chats");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -70,7 +92,14 @@ const LogInForm = () => {
             required={true}
           />
         </FormControlStyled>
-        <Button type="submit" disabled={!formIsValid}></Button>
+        {isError && (
+          <FormControlStyled>
+            <ErrorMessage>{error?.data?.message}</ErrorMessage>
+          </FormControlStyled>
+        )}
+        <Button type="submit" disabled={!formIsValid}>
+          {isLoading ? <Spinner /> : "Log In"}
+        </Button>
       </form>
       <div className="my-4 text-[13px] font-normal text-zinc-500">
         <UnderlineLink className="after:h-[1px]">
