@@ -22,7 +22,11 @@ const Home = () => {
   return (
     <div className="flex h-full w-full flex-col items-center justify-between">
       <Modal isModalOpen={isModalOpen} handleCloseModal={handleCloseModal}>
-        {formModal === "log-in" ? <LogInForm /> : <SignUpForm />}
+        {formModal === "log-in" ? (
+          <LogInForm closeModal={handleCloseModal} />
+        ) : (
+          <SignUpForm closeModal={handleCloseModal} />
+        )}
       </Modal>
       <div className="flex w-full items-center justify-between py-4">
         <div className="flex items-center justify-center gap-2">
@@ -40,7 +44,7 @@ const Home = () => {
       </div>
       <section className="flex w-full items-center justify-between">
         <div className=" w-1/2">
-          <h1 className="font-comfortaa inline-block w-min bg-gradient-to-r from-[#3cd0fa] to-blue-500 bg-clip-text  text-7xl font-bold  leading-[1.2] text-transparent">
+          <h1 className="inline-block w-min bg-gradient-to-r from-[#3cd0fa] to-blue-500 bg-clip-text font-comfortaa  text-7xl font-bold  leading-[1.2] text-transparent">
             Hang out anytime, anywhere
           </h1>
           <p className="mt-5 max-w-[70%] text-skin-muted">

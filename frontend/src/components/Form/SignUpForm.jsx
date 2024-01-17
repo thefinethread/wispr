@@ -1,7 +1,4 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { register } from "../../features/auth/authService";
 import UnderlineLink from "../../commonComponents/styledComponents/UnderlineLink";
 import GooglePng from "../../assets/images/google.png";
 import Button from "../../commonComponents/Buttons/Button";
@@ -16,15 +13,12 @@ import {
 import ValidationMessage from "../../commonComponents/styledComponents/ValidationMessage";
 import Spinner from "../../commonComponents/Spinners/Spinner";
 import ErrorMessage from "../../commonComponents/styledComponents/ErrorMessage";
-import { reset } from "../../features/auth/authSlice";
+import { useRegisterMutation } from "../../features/user/usersApiSlice";
 
-const SignUpForm = () => {
-  const { loading, user, hasError, message, success } = useSelector(
-    (state) => state.auth,
-  );
-
-  const dispatch = useDispatch();
+const SignUpForm = ({ closeModal }) => {
   const navigate = useNavigate();
+
+  const [register, { isLoading, isError, error }] = useRegisterMutation();
 
   let formIsValid = false;
 
@@ -64,35 +58,34 @@ const SignUpForm = () => {
     formIsValid = false;
   }
 
-  const handleSignUp = (e) => {
-    e.preventDefault();
-
-    if (!formIsValid) {
-      return;
-    }
-
-    dispatch(
-      register({
-        username: enteredUsername,
-        email: enteredEmail,
-        password: enteredPassword,
-      }),
-    );
-  };
-
   const resetInputs = () => {
     resetUsernameInput();
     resetEmailInput();
     resetPasswordInput();
   };
 
-  useEffect(() => {
-    if (success) {
-      resetInputs();
-      dispatch(reset());
-      navigate("/chats");
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+
+    if (!formIsValid) {
+      return;
     }
-  }, [success]);
+
+    const userData = {
+      username: enteredUsername,
+      email: enteredEmail,
+      password: enteredPassword,
+    };
+
+    try {
+      await register(userData).unwrap();
+      resetInputs();
+      closeModal();
+      navigate("/chats");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="p-14 text-sm font-light">
@@ -136,13 +129,13 @@ const SignUpForm = () => {
           />
           {passwordHasError && <ValidationMessage msg={passwordContent} />}
         </FormControlStyled>
-        {hasError && (
+        {isError && (
           <FormControlStyled>
-            <ErrorMessage>{message}</ErrorMessage>
+            <ErrorMessage>{error?.data?.message}</ErrorMessage>
           </FormControlStyled>
         )}
         <Button type="submit" disabled={!formIsValid}>
-          {loading ? <Spinner /> : "Sign Up"}
+          {isLoading ? <Spinner /> : "Sign Up"}
         </Button>
       </form>
       <div className="my-4 text-[13px] font-normal text-zinc-500">

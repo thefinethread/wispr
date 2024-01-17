@@ -8,10 +8,12 @@ const Input = ({
   onChange,
   error = false,
 }) => {
-  const errorStyles = error ? `outline-red-500 outline-2` : "";
+  const errorStyles = error
+    ? `outline-red-500 outline-2`
+    : "outline-1 outline-zinc-200";
   return (
     <input
-      className={`w w-80 rounded-sm px-4 py-2 text-sm font-light outline outline-1 outline-zinc-200 ${errorStyles}`}
+      className={`w-80 rounded-sm px-4 py-2 text-sm font-light outline ${errorStyles}`}
       type={type}
       placeholder={placeholder}
       name={name}
