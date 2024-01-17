@@ -13,13 +13,16 @@ import { useLoginMutation } from "../../features/user/usersApiSlice";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../commonComponents/Spinners/Spinner";
 import ErrorMessage from "../../commonComponents/styledComponents/ErrorMessage";
+import { useDispatch } from "react-redux";
+import { saveUserInfo } from "../../features/auth/authSlice";
 
 const LogInForm = ({ closeModal }) => {
-  let formIsValid = false;
-
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [login, { isLoading, isError, error }] = useLoginMutation();
+
+  let formIsValid = false;
 
   const {
     value: enteredEmail,
@@ -56,8 +59,11 @@ const LogInForm = ({ closeModal }) => {
       return;
     }
 
+    const userData = { email: enteredEmail, password: enteredPassword };
+
     try {
-      await login({ email: enteredEmail, password: enteredPassword }).unwrap();
+      const { data } = await login(userData).unwrap();
+      dispatch(saveUserInfo(data));
       resetInputs();
       closeModal();
       navigate("/chats");

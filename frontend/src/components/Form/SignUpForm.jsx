@@ -14,9 +14,12 @@ import ValidationMessage from "../../commonComponents/styledComponents/Validatio
 import Spinner from "../../commonComponents/Spinners/Spinner";
 import ErrorMessage from "../../commonComponents/styledComponents/ErrorMessage";
 import { useRegisterMutation } from "../../features/user/usersApiSlice";
+import { useDispatch } from "react-redux";
+import { saveUserInfo } from "../../features/auth/authSlice";
 
 const SignUpForm = ({ closeModal }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [register, { isLoading, isError, error }] = useRegisterMutation();
 
@@ -78,7 +81,8 @@ const SignUpForm = ({ closeModal }) => {
     };
 
     try {
-      await register(userData).unwrap();
+      const { data } = await register(userData).unwrap();
+      dispatch(saveUserInfo(data));
       resetInputs();
       closeModal();
       navigate("/chats");
