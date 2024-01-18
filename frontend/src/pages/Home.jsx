@@ -1,10 +1,11 @@
 import { useState } from "react";
-import AuthPageImage from "../assets/images/main-page.png";
+import AuthPageImage from "../assets/images/homescreen.png";
 import Modal from "../commonComponents/Modal/Modal";
 import Logo from "../assets/images/logo.png";
 import ButtonStyled from "../commonComponents/styledComponents/ButtonStyled";
 import SignUpForm from "../components/Form/SignUpForm";
 import LogInForm from "../components/Form/LogInForm";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,10 +30,12 @@ const Home = () => {
         )}
       </Modal>
       <div className="flex w-full items-center justify-between py-4">
-        <div className="flex items-center justify-center gap-2">
-          <img className="h-10 w-10 " src={Logo} alt="wispr" />
-          <h2 className="font-comfortaa text-xl font-bold">Wispr</h2>
-        </div>
+        <Link to="/">
+          <div className="flex items-center justify-center gap-2">
+            <img className="h-10 w-10 " src={Logo} alt="wispr" />
+            <h2 className="font-comfortaa text-xl font-bold">Wispr</h2>
+          </div>
+        </Link>
         <nav className="flex gap-4">
           <ButtonStyled id="log-in" onClick={handleModalOpen}>
             Log In
@@ -42,9 +45,9 @@ const Home = () => {
           </ButtonStyled>
         </nav>
       </div>
-      <section className="flex w-full items-center justify-between">
+      <section className="flex w-full flex-1 items-center justify-between">
         <div className=" w-1/2">
-          <h1 className="inline-block w-min bg-gradient-to-r from-[#3cd0fa] to-blue-500 bg-clip-text font-comfortaa  text-7xl font-bold  leading-[1.2] text-transparent">
+          <h1 className="inline-block w-min bg-gradient-to-r from-[#3cd0fa] to-blue-500 bg-clip-text font-comfortaa text-7xl  text-[6vw] font-bold  leading-[1.2] text-transparent">
             Hang out anytime, anywhere
           </h1>
           <p className="mt-5 max-w-[70%] text-skin-muted">

@@ -143,7 +143,7 @@ const SignUpForm = ({ closeModal }) => {
         </Button>
       </form>
       <div className="my-4 text-[13px] font-normal text-zinc-500">
-        <UnderlineLink className="after:h-[1px]">
+        <UnderlineLink to="/forgot-password" className="after:h-[1px]">
           Forgot password?
         </UnderlineLink>
       </div>
