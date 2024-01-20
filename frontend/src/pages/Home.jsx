@@ -21,48 +21,51 @@ const Home = () => {
   };
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-between">
-      <Modal isModalOpen={isModalOpen} handleCloseModal={handleCloseModal}>
-        {formModal === "log-in" ? (
-          <LogInForm closeModal={handleCloseModal} />
-        ) : (
-          <SignUpForm closeModal={handleCloseModal} />
-        )}
-      </Modal>
-      <div className="flex w-full items-center justify-between py-4">
-        <Link to="/">
-          <div className="flex items-center justify-center gap-2">
-            <img className="h-10 w-10 " src={Logo} alt="wispr" />
-            <h2 className="font-comfortaa text-xl font-bold">Wispr</h2>
+    <main className="m-auto h-screen w-full max-w-7xl overflow-hidden px-8 text-base font-normal">
+      <div className="flex h-full w-full flex-col items-center justify-between">
+        <Modal isModalOpen={isModalOpen} handleCloseModal={handleCloseModal}>
+          {formModal === "log-in" ? (
+            <LogInForm closeModal={handleCloseModal} />
+          ) : (
+            <SignUpForm closeModal={handleCloseModal} />
+          )}
+        </Modal>
+        <div className="flex w-full items-center justify-between py-4">
+          <Link to="/">
+            <div className="flex items-center justify-center gap-2">
+              <img className="h-10 w-10 " src={Logo} alt="wispr" />
+              <h2 className="font-comfortaa text-xl font-bold">Wispr</h2>
+            </div>
+          </Link>
+          <nav className="flex gap-4">
+            <ButtonStyled id="log-in" onClick={handleModalOpen}>
+              Log In
+            </ButtonStyled>
+            <ButtonStyled id="sign-up" onClick={handleModalOpen}>
+              Sign Up
+            </ButtonStyled>
+          </nav>
+        </div>
+        <section className="flex w-full flex-1 items-center justify-between">
+          <div className=" w-1/2">
+            <h1 className="inline-block w-min bg-gradient-to-r from-[#3cd0fa] to-blue-500 bg-clip-text font-comfortaa text-7xl  text-[6vw] font-bold  leading-[1.2] text-transparent">
+              Hang out anytime, anywhere
+            </h1>
+            <p className="mt-5 max-w-[70%] text-skin-muted">
+              Wispr makes it easy and fun to stay close to your favourite
+              people.
+            </p>
           </div>
-        </Link>
-        <nav className="flex gap-4">
-          <ButtonStyled id="log-in" onClick={handleModalOpen}>
-            Log In
-          </ButtonStyled>
-          <ButtonStyled id="sign-up" onClick={handleModalOpen}>
-            Sign Up
-          </ButtonStyled>
-        </nav>
+          <div className="flex-1">
+            <img
+              className="w-4/5 object-cover"
+              src={AuthPageImage}
+              alt="hero-section"
+            />
+          </div>
+        </section>
       </div>
-      <section className="flex w-full flex-1 items-center justify-between">
-        <div className=" w-1/2">
-          <h1 className="inline-block w-min bg-gradient-to-r from-[#3cd0fa] to-blue-500 bg-clip-text font-comfortaa text-7xl  text-[6vw] font-bold  leading-[1.2] text-transparent">
-            Hang out anytime, anywhere
-          </h1>
-          <p className="mt-5 max-w-[70%] text-skin-muted">
-            Wispr makes it easy and fun to stay close to your favourite people.
-          </p>
-        </div>
-        <div className="flex-1">
-          <img
-            className="w-4/5 object-cover"
-            src={AuthPageImage}
-            alt="hero-section"
-          />
-        </div>
-      </section>
-    </div>
+    </main>
   );
 };
 
