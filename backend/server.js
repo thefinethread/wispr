@@ -5,6 +5,8 @@ const dbConnect = require('./config/db');
 const cookieParser = require('cookie-parser');
 const { errorHandler } = require('./middlewares/errorMiddleware');
 const userRouter = require('./routes/user.routes');
+const conversationRouter = require('./routes/conversation.routes');
+const messageRouter = require('./routes/message.routes');
 const path = require('path');
 const socketServer = require('./socketio/socketServer');
 
@@ -17,14 +19,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
 // routes
 app.use('/api/users', userRouter);
+app.use('/api/conversations', conversationRouter);
+app.use('/api/messages', messageRouter);
+
+// app.use(express.static(path.join(__dirname, 'public')));
+
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// });
 
 // error middleware at the end always
 app.use(errorHandler);

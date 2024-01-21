@@ -9,7 +9,7 @@ const ChatIconStyled = ({
   return (
     <li
       onClick={onClick}
-      className={`flex cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-zinc-100 ${bgHoverSize} ${color} ${className}`}
+      className={`flex cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-[rgb(238,238,241)] ${bgHoverSize} ${color} ${className}`}
     >
       <Icon size={iconSize} />
     </li>
