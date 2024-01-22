@@ -1,8 +1,15 @@
 const { Router } = require('express');
-const { saveMessage } = require('../controllers/message.controller');
+const {
+  saveMessage,
+  getMessagesOfAConversation,
+} = require('../controllers/message.controller');
+const { verifyJwt } = require('../middlewares/authMiddleware');
 
 const router = Router();
 
-router.post('/', saveMessage);
+router
+  .route('/')
+  .post(verifyJwt, saveMessage)
+  .get(verifyJwt, getMessagesOfAConversation);
 
 module.exports = router;

@@ -9,14 +9,14 @@ const messageSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    chat: {
+    conversation: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Chat',
+      ref: 'Conversation',
     },
   },
   { timestamps: true }
 );
 
-const Chat = mongoose.model('Message', messageSchema);
+const Message = mongoose.model('Message', messageSchema);
 
-module.exports = Chat;
+module.exports = Message;

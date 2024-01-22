@@ -7,7 +7,9 @@ const { verifyJwt } = require('../middlewares/authMiddleware');
 
 const router = Router();
 
-router.post('/', createConversation);
-router.get('/', getConversationsByUserId);
+router
+  .route('/')
+  .post(verifyJwt, createConversation)
+  .get(verifyJwt, getConversationsByUserId);
 
 module.exports = router;
