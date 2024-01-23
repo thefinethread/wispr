@@ -3,6 +3,7 @@ import TopNavBar from "../MainChatScreen/TopNavBar";
 import ConversationWindow from "../MainChatScreen/ConversationWindow";
 import MessageInput from "../MainChatScreen/MessageInput";
 import { useState } from "react";
+import { useGetConversationsQuery } from "../../features/conversations/conversationApiSlice";
 
 const chatInfo = {
   profilePic:
@@ -16,6 +17,8 @@ const chatInfo = {
 };
 
 const MainChatScreen = () => {
+  const { isLoading, data, isError, error } = useGetConversationsQuery();
+
   const { chatId } = useParams();
 
   const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);

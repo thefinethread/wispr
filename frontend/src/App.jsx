@@ -11,8 +11,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         {/* Private Routes */}
-        <Route path="" element={<PrivateRoute />}>
-          <Route path="/chats/:chatId" element={<Chats />} />
+        <Route path="/" element={<PrivateRoute />}>
+          <Route path="chats" element={<Chats />} />
+          <Route path="chats/:chatId" element={<Chats />} />
         </Route>
       </Routes>
     </BrowserRouter>

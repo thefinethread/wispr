@@ -44,4 +44,81 @@ const getConversationsByUserId = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { createConversation, getConversationsByUserId };
+const getConversationsWithBasicInfo = asyncHandler(async (req, res) => {
+  const conversations = await Conversation.aggregate([
+    {
+      $match: {
+        members: req?.user?._id,
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        let: { members: '$members' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $in: ['$_id', '$$members'] },
+                  { $ne: ['$_id', req?.user?._id] },
+                ],
+              },
+            },
+          },
+          {
+            $project: {
+              password: 0,
+              createdAt: 0,
+              updatedAt: 0,
+              refreshToken: 0,
+            },
+          },
+        ],
+        as: 'members',
+      },
+    },
+    {
+      $lookup: {
+        from: 'messages',
+        let: { conversationId: '$_id' },
+        pipeline: [
+          {
+            $match: {
+              conversation: '$$conversationId',
+            },
+          },
+          {
+            $sort: {
+              createdAt: -1,
+            },
+          },
+          {
+            $limit: 1,
+          },
+          {
+            $project: {
+              conversation: 0,
+            },
+          },
+        ],
+        as: 'lastMessage',
+      },
+    },
+    {
+      $addFields: {
+        lastMessage: {
+          $arrayElemAt: ['$lastMessage', 0],
+        },
+      },
+    },
+  ]);
+
+  apiResponse(res, 200, 'OK', conversations);
+});
+
+module.exports = {
+  createConversation,
+  getConversationsByUserId,
+  getConversationsWithBasicInfo,
+};
