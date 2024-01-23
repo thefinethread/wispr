@@ -7,6 +7,7 @@ export const conversationApiSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: `${CONVERSATION_URL}`,
       }),
+      transformResponse: (res) => res.data,
     }),
   }),
 });

@@ -13,7 +13,7 @@ function App() {
         {/* Private Routes */}
         <Route path="/" element={<PrivateRoute />}>
           <Route path="chats" element={<Chats />} />
-          <Route path="chats/:chatId" element={<Chats />} />
+          <Route path="chats/:conversationId" element={<Chats />} />
         </Route>
       </Routes>
     </BrowserRouter>

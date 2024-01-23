@@ -4,6 +4,7 @@ import ConversationWindow from "../MainChatScreen/ConversationWindow";
 import MessageInput from "../MainChatScreen/MessageInput";
 import { useState } from "react";
 import { useGetConversationsQuery } from "../../features/conversations/conversationApiSlice";
+import { useGetMessagesQuery } from "../../features/messages/messagesApiSlice";
 
 const chatInfo = {
   profilePic:
@@ -17,16 +18,12 @@ const chatInfo = {
 };
 
 const MainChatScreen = () => {
-  const { isLoading, data, isError, error } = useGetConversationsQuery();
-
-  const { chatId } = useParams();
-
   const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
 
   const openChatInfo = () => setIsChatInfoOpen((prev) => !prev);
 
   return (
-    <section className="flex h-full">
+    <section className="flex h-full w-full">
       <section className="flex h-full flex-1 flex-col">
         <TopNavBar chatInfo={chatInfo} openChatInfo={openChatInfo} />
         <ConversationWindow chatInfo={chatInfo} />

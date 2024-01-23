@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Conversation = require('../models/Conversation');
 const apiResponse = require('../utils/apiResponse');
 const { SERVER_ERROR } = require('../constants/commonMessages');
+const { default: mongoose } = require('mongoose');
 
 /**
  * Desc - create new conversation
@@ -28,22 +29,58 @@ const createConversation = asyncHandler(async (req, res) => {
 });
 
 /**
- * Desc - get all the conversations of users
- * api - GET /api/conversations
+ * Desc - get conversation info
+ * api - GET /api/conversations/:conversationId
  * private
  */
-const getConversationsByUserId = asyncHandler(async (req, res) => {
-  const conversations = await Conversation.find({
-    members: { $in: [req?.user?._id] },
-  });
+const getConversation = asyncHandler(async (req, res) => {
+  const { conversationId } = req.params;
+  const conversations = await Conversation.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(conversationId),
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        let: { members: '$members' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $in: ['$_id', '$$members'] },
+                  { $ne: ['$_id', req?.user?._id] },
+                ],
+              },
+            },
+          },
+          {
+            $project: {
+              username: 1,
+              profilePhoto: 1,
+              email: 1,
+            },
+          },
+        ],
+        as: 'members',
+      },
+    },
+  ]);
 
   if (conversations) {
-    apiResponse(res, 200, 'OK', conversations);
+    apiResponse(res, 200, 'OK', conversations?.[0]);
   } else {
     throw new Error(SERVER_ERROR);
   }
 });
 
+/**
+ * Desc - get all the conversations of users
+ * api - GET /api/conversations
+ * private
+ */
 const getConversationsWithBasicInfo = asyncHandler(async (req, res) => {
   const conversations = await Conversation.aggregate([
     {
@@ -85,7 +122,9 @@ const getConversationsWithBasicInfo = asyncHandler(async (req, res) => {
         pipeline: [
           {
             $match: {
-              conversation: '$$conversationId',
+              $expr: {
+                $eq: ['$conversation', '$$conversationId'],
+              },
             },
           },
           {
@@ -119,6 +158,6 @@ const getConversationsWithBasicInfo = asyncHandler(async (req, res) => {
 
 module.exports = {
   createConversation,
-  getConversationsByUserId,
+  getConversation,
   getConversationsWithBasicInfo,
 };

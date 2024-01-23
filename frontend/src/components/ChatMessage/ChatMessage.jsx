@@ -2,24 +2,25 @@ import { useState } from "react";
 import ChatIconStyled from "../../commonComponents/styledComponents/MainChatScreen/ChatIconStyled";
 import { FaEllipsisVertical, FaRegFaceSmile } from "react-icons/fa6";
 
-const userId = "1234";
+const userId = JSON.parse(localStorage.getItem("userInfo"))?._id || "";
 
-const isMyText = (conversation) => conversation.senderId === userId;
+const isMyText = (sender) => userId === sender;
 
-const ChatMessage = ({ conversation, chatInfo }) => {
+const ChatMessage = ({ text, sender, createdAt, chatInfo }) => {
+  console.log(text, sender);
   const [isHovered, setIsHovered] = useState(false);
   return (
     <li
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`my-1 flex items-center justify-end gap-2 ${
-        isMyText(conversation) ? "flex-row" : "flex-row-reverse"
+        isMyText(sender) ? "flex-row" : "flex-row-reverse"
       }`}
     >
       {isHovered && (
         <ul
           className={`flex items-center${
-            isMyText(conversation) ? "flex-row-reverse" : ""
+            isMyText(sender) ? "flex-row-reverse" : ""
           }`}
         >
           <ChatIconStyled
@@ -39,12 +40,12 @@ const ChatMessage = ({ conversation, chatInfo }) => {
 
       <p
         className={`max-w-[50%] rounded-[18px] px-3 py-2 ${
-          isMyText(conversation) ? "bg-skin-primary text-white" : "bg-zinc-100"
+          isMyText(sender) ? "bg-skin-primary text-white" : "bg-zinc-100"
         }`}
       >
-        {conversation.text}
+        {text}
       </p>
-      {!isMyText(conversation) && (
+      {!isMyText(sender) && (
         <img
           className="h-7 w-7 self-end rounded-full object-cover"
           src={chatInfo.profilePic}
