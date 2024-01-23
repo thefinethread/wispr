@@ -2,8 +2,9 @@ import { useParams } from "react-router-dom";
 import ChatMessage from "../ChatMessage/ChatMessage";
 import { useGetMessagesQuery } from "../../features/messages/messagesApiSlice";
 import Spinner from "../../commonComponents/Spinners/Spinner";
+import { useGetConversationQuery } from "../../features/conversations/conversationApiSlice";
 
-const ConversationWindow = ({ chatInfo }) => {
+const ConversationWindow = () => {
   const { conversationId } = useParams();
 
   const {
@@ -12,6 +13,9 @@ const ConversationWindow = ({ chatInfo }) => {
     isError,
     error,
   } = useGetMessagesQuery({ conversationId });
+
+  const { data: conversation } = useGetConversationQuery({ conversationId });
+
   return (
     <div className="w-full flex-1 items-end overflow-y-auto px-3">
       <ul className="flex h-full w-full flex-col">
@@ -19,7 +23,7 @@ const ConversationWindow = ({ chatInfo }) => {
           <Spinner color="border-zinc-400" size="h-7 w-7" className=" m-auto" />
         ) : (
           messages?.map((message) => (
-            <ChatMessage {...message} chatInfo={chatInfo} />
+            <ChatMessage {...message} member={conversation?.members?.[0]} />
           ))
         )}
       </ul>

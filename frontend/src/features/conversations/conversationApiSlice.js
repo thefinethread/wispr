@@ -9,7 +9,15 @@ export const conversationApiSlice = apiSlice.injectEndpoints({
       }),
       transformResponse: (res) => res.data,
     }),
+
+    getConversation: builder.query({
+      query: ({ conversationId }) => ({
+        url: `${CONVERSATION_URL}/${conversationId}`,
+      }),
+      transformResponse: (res) => res.data,
+    }),
   }),
 });
 
-export const { useGetConversationsQuery } = conversationApiSlice;
+export const { useGetConversationsQuery, useGetConversationQuery } =
+  conversationApiSlice;

@@ -6,7 +6,7 @@ const ChatCard = ({ _id, members, lastMessage }) => {
   return (
     <Link to={`/chats/${_id}`}>
       <div className="hover flex h-[72px] w-full cursor-pointer items-center justify-between gap-2 rounded-lg px-3 py-3 transition-colors hover:bg-zinc-100">
-        <div className="flex h-full flex-1 items-center justify-between gap-2 overflow-hidden">
+        <div className="flex h-full flex-1 items-center  gap-2 overflow-hidden">
           <img
             className="aspect-square h-full rounded-full object-cover"
             src={members?.[0]?.profilePhoto || NoProfilePic}

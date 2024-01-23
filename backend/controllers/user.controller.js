@@ -79,6 +79,7 @@ const login = asyncHandler(async (req, res) => {
     _id: user.id,
     username: user.username,
     email: user.email,
+    profilePhoto: user.profilePhoto,
   });
 });
 

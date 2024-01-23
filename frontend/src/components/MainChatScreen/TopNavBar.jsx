@@ -1,19 +1,27 @@
 import { FaVideo, FaPhone, FaEllipsis } from "react-icons/fa6";
 import ChatIconStyled from "../../commonComponents/styledComponents/MainChatScreen/ChatIconStyled";
-import ChatIconsList from "../../commonComponents/ChatIconsList/ChatIconsList";
-
-const icons = [FaPhone, FaVideo, FaEllipsis];
+import { useGetConversationQuery } from "../../features/conversations/conversationApiSlice";
+import NoProfilePic from "../../assets/images/no-profile-pic.jpg";
+import { useParams } from "react-router-dom";
 
 const TopNavBar = ({ chatInfo, openChatInfo }) => {
+  const { conversationId } = useParams();
+  console.log(conversationId);
+  const { isLoading, data: conversation } = useGetConversationQuery({
+    conversationId,
+  });
+
   return (
     <div className="flex h-14 w-full items-center justify-between bg-white pl-1 pr-2 shadow">
       <div className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-zinc-100">
         <img
           className="h-10 w-10 rounded-full object-cover"
-          src={chatInfo.profilePic}
+          src={conversation?.members?.[0]?.profilePhoto || NoProfilePic}
           alt=""
         />
-        <div className="text-base font-normal">{chatInfo.name}</div>
+        <div className="text-base font-normal">
+          {conversation?.members?.[0]?.username}
+        </div>
       </div>
       <ul className="flex items-center gap-2">
         <ChatIconStyled icon={FaPhone} />

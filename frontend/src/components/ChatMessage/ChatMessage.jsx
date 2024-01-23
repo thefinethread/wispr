@@ -1,13 +1,13 @@
 import { useState } from "react";
 import ChatIconStyled from "../../commonComponents/styledComponents/MainChatScreen/ChatIconStyled";
 import { FaEllipsisVertical, FaRegFaceSmile } from "react-icons/fa6";
+import NoProfilePic from "../../assets/images/no-profile-pic.jpg";
 
 const userId = JSON.parse(localStorage.getItem("userInfo"))?._id || "";
 
 const isMyText = (sender) => userId === sender;
 
-const ChatMessage = ({ text, sender, createdAt, chatInfo }) => {
-  console.log(text, sender);
+const ChatMessage = ({ text, sender, createdAt, member }) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <li
@@ -48,7 +48,7 @@ const ChatMessage = ({ text, sender, createdAt, chatInfo }) => {
       {!isMyText(sender) && (
         <img
           className="h-7 w-7 self-end rounded-full object-cover"
-          src={chatInfo.profilePic}
+          src={member?.profilePhoto || NoProfilePic}
           alt=""
         />
       )}

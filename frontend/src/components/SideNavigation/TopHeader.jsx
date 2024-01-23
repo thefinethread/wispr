@@ -9,7 +9,7 @@ const TopHeader = ({ openProfileSlider }) => {
         <img
           onClick={openProfileSlider}
           className="h-10 w-10 cursor-pointer rounded-full"
-          src=""
+          src={JSON.parse(localStorage.getItem("userInfo"))?.profilePhoto}
           alt=""
         />
         <ul>
