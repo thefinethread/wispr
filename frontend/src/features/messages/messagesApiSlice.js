@@ -8,9 +8,20 @@ export const messageApiSlice = apiSlice.injectEndpoints({
         url: `${MESSAGE_URL}`,
         params: { conversationId },
       }),
+      providesTags: ["Message"],
+      transformResponse: (res) => res.data,
+    }),
+
+    sendMessage: builder.mutation({
+      query: (data) => ({
+        url: `${MESSAGE_URL}`,
+        body: data,
+        method: "POST",
+      }),
+      invalidatesTags: ["Message"],
       transformResponse: (res) => res.data,
     }),
   }),
 });
 
-export const { useGetMessagesQuery } = messageApiSlice;
+export const { useGetMessagesQuery, useSendMessageMutation } = messageApiSlice;

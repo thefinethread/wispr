@@ -7,8 +7,30 @@ import {
 import EmojiPicker from "emoji-picker-react";
 import { RiSendPlaneFill, RiFileGifFill } from "react-icons/ri";
 import ChatIconStyled from "../../commonComponents/styledComponents/MainChatScreen/ChatIconStyled";
+import { useState } from "react";
+import { useSendMessageMutation } from "../../features/messages/messagesApiSlice";
+import { useParams } from "react-router-dom";
 
 const MessageInput = () => {
+  const [text, setText] = useState("");
+  const [sendMessage, {}] = useSendMessageMutation();
+  const { conversationId } = useParams();
+
+  const handleSendMessage = async (e) => {
+    if (e.key === "Enter") {
+      const message = {
+        conversation: conversationId,
+        text,
+      };
+      try {
+        await sendMessage(message).unwrap();
+        setText("");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <section className="flex h-16 w-full items-center justify-between gap-2 px-3">
       <ul className="flex items-center gap-1">
@@ -18,6 +40,9 @@ const MessageInput = () => {
       </ul>
       <div className="relative flex-1">
         <input
+          onKeyUp={handleSendMessage}
+          onChange={(e) => setText(e.target.value)}
+          value={text}
           type="text"
           placeholder="Aa"
           className="h-full w-full rounded-full bg-zinc-100 px-4 py-2 outline-none placeholder:text-zinc-600"
