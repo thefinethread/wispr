@@ -7,27 +7,64 @@ import {
 import EmojiPicker from "emoji-picker-react";
 import { RiSendPlaneFill, RiFileGifFill } from "react-icons/ri";
 import ChatIconStyled from "../../commonComponents/styledComponents/MainChatScreen/ChatIconStyled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSendMessageMutation } from "../../features/messages/messagesApiSlice";
 import { useParams } from "react-router-dom";
+import socket from "../../config/socketConfig";
+import { useGetConversationQuery } from "../../features/conversations/conversationApiSlice";
+import { useDispatch } from "react-redux";
+import { newMessage } from "../../features/messages/messageSlice";
+
+const typingStatus = {
+  typing: true,
+  currentTime: new Date().getTime(),
+};
 
 const MessageInput = () => {
   const [text, setText] = useState("");
-  const [sendMessage, {}] = useSendMessageMutation();
   const { conversationId } = useParams();
+  const dispatch = useDispatch();
 
-  const handleSendMessage = async (e) => {
-    if (e.key === "Enter") {
+  const { data: conversation } = useGetConversationQuery({ conversationId });
+
+  let typing = false;
+  let timeout = undefined;
+
+  const timeoutFunction = () => {
+    typing = false;
+    socket.emit("stop-typing", {
+      receiverEmail: conversation?.members?.[0]?.email,
+      senderId: JSON.parse(localStorage.getItem("userInfo"))._id,
+    });
+  };
+
+  const handleSendMessage = (e) => {
+    if (!typing) {
+      typing = true;
+
+      socket.emit("typing", {
+        receiverEmail: conversation?.members?.[0]?.email,
+        senderId: JSON.parse(localStorage.getItem("userInfo"))._id,
+        text: `${
+          JSON.parse(localStorage.getItem("userInfo")).username
+        } is typing...`,
+      });
+
+      timeout = setTimeout(timeoutFunction, 5000);
+    } else {
+      clearTimeout(timeout);
+      setTimeout(timeoutFunction, 5000);
+    }
+
+    if (e.key === "Enter" && e.target.value.trim()) {
       const message = {
-        conversation: conversationId,
+        conversationId,
+        senderId: JSON.parse(localStorage.getItem("userInfo"))._id,
+        receiverEmail: conversation?.members?.[0]?.email,
         text,
       };
-      try {
-        await sendMessage(message).unwrap();
-        setText("");
-      } catch (error) {
-        console.log(error);
-      }
+      socket.emit("send-message", message);
+      setText("");
     }
   };
 
@@ -40,7 +77,7 @@ const MessageInput = () => {
       </ul>
       <div className="relative flex-1">
         <input
-          onKeyUp={handleSendMessage}
+          onKeyDown={handleSendMessage}
           onChange={(e) => setText(e.target.value)}
           value={text}
           type="text"

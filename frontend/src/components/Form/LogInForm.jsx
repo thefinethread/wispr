@@ -66,7 +66,7 @@ const LogInForm = ({ closeModal }) => {
       dispatch(saveUserInfo(data));
       resetInputs();
       closeModal();
-      navigate("/chats");
+      navigate("/chats/home");
     } catch (error) {
       console.log(error);
     }

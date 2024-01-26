@@ -13,7 +13,6 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Poppins"],
         comfortaa: ["Comfortaa"],
       },
       textColor: {

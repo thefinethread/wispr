@@ -37,11 +37,11 @@ const getMessagesOfAConversation = asyncHandler(async (req, res) => {
         'conversationInfo.members': new mongoose.Types.ObjectId(req?.user?._id),
       },
     },
-    {
-      $sort: {
-        createdAt: -1, // sorting messages in desc order of time
-      },
-    },
+    // {
+    //   $sort: {
+    //     createdAt: -1, // sorting messages in desc order of time
+    //   },
+    // },
     {
       $project: {
         conversationInfo: 0,
@@ -61,22 +61,42 @@ const getMessagesOfAConversation = asyncHandler(async (req, res) => {
  * api - POST /api/messages
  * private
  */
-const saveMessage = asyncHandler(async (req, res) => {
-  const { conversation, text } = req.body;
+// const saveMessage = asyncHandler(async (req, res) => {
+//   const { conversation, text } = req.body;
 
-  if (!conversation || !text) {
-    res.status(400);
+//   if (!conversation || !text) {
+//     res.status(400);
+//     throw new Error('All fields are required');
+//   }
+
+//   const message = await Message.create({
+//     conversation,
+//     text,
+//     sender: req?.user?._id,
+//   });
+
+//   if (message) {
+//     apiResponse(res, 200, 'OK', message);
+//   } else {
+//     throw new Error(SERVER_ERROR);
+//   }
+// });
+
+const saveMessage = asyncHandler(async (conversationId, senderId, text) => {
+  if (!conversationId || !text) {
+    // res.status(400);
     throw new Error('All fields are required');
   }
 
   const message = await Message.create({
-    conversation,
+    conversation: conversationId,
     text,
-    sender: req?.user?._id,
+    sender: senderId,
   });
 
   if (message) {
-    apiResponse(res, 200, 'OK', message);
+    return message;
+    // apiResponse(res, 200, 'OK', message);
   } else {
     throw new Error(SERVER_ERROR);
   }

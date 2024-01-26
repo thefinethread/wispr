@@ -1,34 +1,57 @@
-let activeUsers = [];
+const { saveMessage } = require('../controllers/message.controller');
+
+let users = new Map();
 
 const socketServer = (server) => {
-  const io = require('socket.io')(server);
+  const io = require('socket.io')(server, {
+    cors: {
+      origin: '*',
+    },
+  });
 
   io.on('connection', (socket) => {
-    socket.on('add-new-user', (userId) => {
-      addNewUser(userId, socket.id);
-      io.emit('get-active-users', activeUsers);
+    console.log(`connected ${socket.id}`);
+
+    socket.on('add-user', (data) => addUser(data));
+
+    socket.on(
+      'send-message',
+      async ({ conversationId, senderId, receiverEmail, text }) => {
+        const data = await saveMessage(conversationId, senderId, text);
+        if (data) {
+          socket.emit('my-message', data);
+
+          if (findReceiver(receiverEmail))
+            io.to(findReceiver(receiverEmail).socketId).emit(
+              'receive-message',
+              data
+            );
+        }
+      }
+    );
+
+    socket.on('typing', ({ senderId, receiverEmail, text }) => {
+      console.log(senderId, receiverEmail);
+      io.to(findReceiver(receiverEmail)?.socketId).emit(
+        'typing-response',
+        text
+      );
     });
 
-    socket.on('send-message', (data) => {
-      const { receiverId } = data;
-      const receiver = activeUsers.find((user) => user.userId === receiverId);
-      receiver && io.to(receiver.socketId).emit('receive-message', data);
+    socket.on('stop-typing', ({ senderId, receiverEmail }) => {
+      io.to(findReceiver(receiverEmail)?.socketId).emit('stop-typing');
     });
 
-    socket.on('disconnect', () => {
-      removeActiveUser(socket.id);
-      io.emit('get-active-users', activeUsers);
-    });
+    socket.on('disconnect', () => removeUser(socket.id));
   });
 };
 
-const addNewUser = (userId, socketId) => {
-  !activeUsers.some((user) => user.userId === userId) &&
-    activeUsers.push({ userId, socketId });
-};
+const findReceiver = (email) => users.get(email);
 
-const removeActiveUser = (socketId) => {
-  activeUsers = activeUsers.filter((user) => user.socketId !== socketId);
-};
+const addUser = (data) =>
+  !users.has(data?.email) && users.set(data?.email, data);
+
+const removeUser = (id) =>
+  users.forEach((value, key) => value?.socketId === id && users.delete(key));
 
 module.exports = socketServer;

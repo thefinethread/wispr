@@ -4,7 +4,7 @@ import { useGetConversationQuery } from "../../features/conversations/conversati
 import NoProfilePic from "../../assets/images/no-profile-pic.jpg";
 import { useParams } from "react-router-dom";
 
-const TopNavBar = ({ chatInfo, openChatInfo }) => {
+const TopNavBar = ({ openChatInfo }) => {
   const { conversationId } = useParams();
   console.log(conversationId);
   const { isLoading, data: conversation } = useGetConversationQuery({
@@ -19,7 +19,7 @@ const TopNavBar = ({ chatInfo, openChatInfo }) => {
           src={conversation?.members?.[0]?.profilePhoto || NoProfilePic}
           alt=""
         />
-        <div className="text-base font-normal">
+        <div className=" text-lg font-normal">
           {conversation?.members?.[0]?.username}
         </div>
       </div>

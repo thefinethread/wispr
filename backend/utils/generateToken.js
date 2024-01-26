@@ -10,13 +10,13 @@ const generateAccessToken = (res, user) => {
     { _id: user._id, email: user.email },
     process.env.JWT_SECRET,
     {
-      expiresIn: 5 * 60, // 5 minutes
+      expiresIn: 1 * 60 * 60, // 5 minutes
     }
   );
 
   res.cookie('accessToken', token, {
     ...options,
-    maxAge: 5 * 60 * 1000, // 5 minutes
+    maxAge: 1 * 60 * 60 * 1000, // 5 minutes
   });
 };
 
