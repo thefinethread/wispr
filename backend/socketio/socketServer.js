@@ -54,12 +54,15 @@ const socketServer = (server) => {
       }
     );
 
-    socket.on('typing', ({ receiverId, text }) => {
-      io.to(users.get(receiverId)?.socketId).emit('start-typing', text);
+    socket.on('typing', ({ receiverId, senderId, text }) => {
+      io.to(users.get(receiverId)?.socketId).emit('start-typing', {
+        senderId,
+        text,
+      });
     });
 
-    socket.on('stop-typing', (receiverId) => {
-      io.to(users.get(receiverId)?.socketId).emit('stop-typing');
+    socket.on('stop-typing', ({ senderId, receiverId }) => {
+      io.to(users.get(receiverId)?.socketId).emit('stop-typing', { senderId });
     });
 
     socket.on('end', () => {

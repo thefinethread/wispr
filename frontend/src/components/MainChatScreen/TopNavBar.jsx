@@ -3,25 +3,32 @@ import ChatIconStyled from "../../commonComponents/styledComponents/MainChatScre
 import { useGetConversationQuery } from "../../features/conversations/conversationApiSlice";
 import NoProfilePic from "../../assets/images/no-profile-pic.jpg";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const TopNavBar = ({ openChatInfo }) => {
   const { conversationId } = useParams();
-  console.log(conversationId);
-  const { isLoading, data: conversation } = useGetConversationQuery({
-    conversationId,
-  });
+  const { senderId, text } = useSelector(
+    (state) => state.messageReducer.typing,
+  );
+  const { data: conversation } = useGetConversationQuery({ conversationId });
+
+  const receiver = conversation?.members?.[0];
 
   return (
     <div className="flex h-14 w-full items-center justify-between bg-white pl-1 pr-2 shadow">
       <div className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-zinc-100">
         <img
           className="h-10 w-10 rounded-full object-cover"
-          src={conversation?.members?.[0]?.profilePhoto || NoProfilePic}
+          src={receiver?.profilePhoto || NoProfilePic}
           alt=""
         />
-        <div className="flex flex-col justify-center text-base font-normal leading-none">
-          <span>{conversation?.members?.[0]?.username}</span>
-          <span className="text-sm font-light">typing...</span>
+        <div className="flex flex-col justify-center font-normal">
+          <span className="text-base leading-tight">{receiver?.username}</span>
+          {receiver?._id === senderId && text && (
+            <span className="text-[13px] font-normal text-zinc-400">
+              {text}
+            </span>
+          )}
         </div>
       </div>
       <ul className="flex items-center gap-2">

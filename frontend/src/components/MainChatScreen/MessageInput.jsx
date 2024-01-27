@@ -34,7 +34,10 @@ const MessageInput = () => {
 
   const timeoutFunction = () => {
     typing = false;
-    socket.emit("stop-typing", conversation?.members?.[0]?._id);
+    socket.emit("stop-typing", {
+      senderId: userInfo?._id,
+      receiverId: conversation?.members?.[0]?._id,
+    });
   };
 
   const handleInputChange = (e) => {
@@ -44,6 +47,7 @@ const MessageInput = () => {
       typing = true;
 
       socket.emit("typing", {
+        senderId: userInfo?._id,
         receiverId: conversation?.members?.[0]?._id,
         text: "typing...",
       });

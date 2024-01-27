@@ -2,7 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   messages: [],
-  typing: "",
+  typing: {
+    senderId: "",
+    text: "",
+  },
 };
 
 const messageSlice = createSlice({

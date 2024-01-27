@@ -22,8 +22,12 @@ const Chats = () => {
     socket.on("receive-message", (data) => dispatch(newMessage(data)));
     socket.on("my-message", (data) => dispatch(newMessage(data)));
 
-    socket.on("start-typing", (data) => dispatch(typing(data)));
-    socket.on("stop-typing", () => dispatch(typing("")));
+    socket.on("start-typing", ({ senderId, text }) =>
+      dispatch(typing({ senderId, text })),
+    );
+    socket.on("stop-typing", ({ senderId }) =>
+      dispatch(typing({ senderId, text: "" })),
+    );
 
     return () => {
       socket.disconnect(); // disconnect socket once user leaves the component
