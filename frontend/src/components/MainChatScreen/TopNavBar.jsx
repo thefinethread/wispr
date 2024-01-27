@@ -19,8 +19,9 @@ const TopNavBar = ({ openChatInfo }) => {
           src={conversation?.members?.[0]?.profilePhoto || NoProfilePic}
           alt=""
         />
-        <div className=" text-lg font-normal">
-          {conversation?.members?.[0]?.username}
+        <div className="flex flex-col justify-center text-base font-normal leading-none">
+          <span>{conversation?.members?.[0]?.username}</span>
+          <span className="text-sm font-light">typing...</span>
         </div>
       </div>
       <ul className="flex items-center gap-2">

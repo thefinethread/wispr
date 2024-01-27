@@ -12,7 +12,7 @@ import { useSendMessageMutation } from "../../features/messages/messagesApiSlice
 import { useParams } from "react-router-dom";
 import socket from "../../config/socketConfig";
 import { useGetConversationQuery } from "../../features/conversations/conversationApiSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { newMessage } from "../../features/messages/messageSlice";
 
 const typingStatus = {
@@ -25,6 +25,8 @@ const MessageInput = () => {
   const { conversationId } = useParams();
   const dispatch = useDispatch();
 
+  const { userInfo } = useSelector((state) => state.auth);
+
   const { data: conversation } = useGetConversationQuery({ conversationId });
 
   let typing = false;
@@ -32,38 +34,37 @@ const MessageInput = () => {
 
   const timeoutFunction = () => {
     typing = false;
-    socket.emit("stop-typing", {
-      receiverEmail: conversation?.members?.[0]?.email,
-      senderId: JSON.parse(localStorage.getItem("userInfo"))._id,
-    });
+    socket.emit("stop-typing", conversation?.members?.[0]?._id);
   };
 
-  const handleSendMessage = (e) => {
+  const handleInputChange = (e) => {
+    setText(e.target.value);
+
     if (!typing) {
       typing = true;
 
       socket.emit("typing", {
-        receiverEmail: conversation?.members?.[0]?.email,
-        senderId: JSON.parse(localStorage.getItem("userInfo"))._id,
-        text: `${
-          JSON.parse(localStorage.getItem("userInfo")).username
-        } is typing...`,
+        receiverId: conversation?.members?.[0]?._id,
+        text: "typing...",
       });
 
-      timeout = setTimeout(timeoutFunction, 5000);
+      timeout = setTimeout(timeoutFunction, 2000);
     } else {
       clearTimeout(timeout);
-      setTimeout(timeoutFunction, 5000);
+      setTimeout(timeoutFunction, 2000);
     }
+  };
 
+  const handleSendMessage = (e) => {
     if (e.key === "Enter" && e.target.value.trim()) {
       const message = {
         conversationId,
-        senderId: JSON.parse(localStorage.getItem("userInfo"))._id,
-        receiverEmail: conversation?.members?.[0]?.email,
+        senderId: userInfo?._id,
+        receiverId: conversation?.members?.[0]?._id,
         text,
       };
       socket.emit("send-message", message);
+      clearTimeout(timeout);
       setText("");
     }
   };
@@ -78,7 +79,7 @@ const MessageInput = () => {
       <div className="relative flex-1">
         <input
           onKeyDown={handleSendMessage}
-          onChange={(e) => setText(e.target.value)}
+          onChange={handleInputChange}
           value={text}
           type="text"
           placeholder="Aa"

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AuthPageImage from "../assets/images/homescreen.png";
 import Modal from "../commonComponents/Modal/Modal";
 import Logo from "../assets/images/logo.png";

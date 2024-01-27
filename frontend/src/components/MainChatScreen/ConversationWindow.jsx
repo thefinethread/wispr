@@ -26,15 +26,8 @@ const ConversationWindow = () => {
   const typingRef = useRef();
 
   useEffect(() => {
-    socket.on("typing-response", (data) => setTyping(data));
+    socket.on("start-typing", (data) => setTyping(data));
     socket.on("stop-typing", () => setTyping(""));
-  }, []);
-
-  useEffect(() => {
-    socket.on("receive-message", (data) => dispatch(newMessage(data)));
-    socket.on("my-message", (data) => {
-      dispatch(newMessage(data));
-    });
   }, []);
 
   useEffect(() => {

@@ -1,55 +1,80 @@
+const cookieParser = require('cookie-parser');
 const { saveMessage } = require('../controllers/message.controller');
+const { verifyJwt } = require('../middlewares/authMiddleware');
 
 let users = new Map();
 
 const socketServer = (server) => {
   const io = require('socket.io')(server, {
     cors: {
-      origin: '*',
+      origin: 'http://localhost:3000',
+      credentials: true,
     },
   });
 
-  io.on('connection', (socket) => {
-    console.log(`connected ${socket.id}`);
+  let user;
 
-    socket.on('add-user', (data) => addUser(data));
+  io.use(async (socket, next) => {
+    cookieParser()(socket.request, socket.request.res, async () => {
+      const token = socket.request?.cookies?.accessToken;
+      if (token) {
+        await verifyJwt(socket.request, socket.request.res, next);
+        user = {
+          _id: socket?.request?.user?._id?.toString(),
+          email: socket?.request?.user?.email,
+          username: socket?.request?.user?.username,
+          socketId: socket.id,
+        };
+        console.log(user.email);
+      } else {
+        const err = new Error('not authorized');
+        next(err);
+      }
+    });
+  });
+
+  io.on('connection', (socket) => {
+    console.log(`connected: ${socket.id}`);
+
+    socket.on('add-user', () => {
+      !users.has(user?._id) && users.set(user?._id, user);
+    });
 
     socket.on(
       'send-message',
-      async ({ conversationId, senderId, receiverEmail, text }) => {
-        const data = await saveMessage(conversationId, senderId, text);
+      async ({ conversationId, senderId, receiverId, text }) => {
+        const data = await saveMessage(conversationId, senderId, text); // save message to db
         if (data) {
-          socket.emit('my-message', data);
+          socket.emit('my-message', data); // send message back to the sender to display in ui
 
-          if (findReceiver(receiverEmail))
-            io.to(findReceiver(receiverEmail).socketId).emit(
-              'receive-message',
-              data
-            );
+          const receiver = users.get(receiverId);
+
+          receiver && io.to(receiver.socketId).emit('receive-message', data);
         }
       }
     );
 
-    socket.on('typing', ({ senderId, receiverEmail, text }) => {
-      console.log(senderId, receiverEmail);
-      io.to(findReceiver(receiverEmail)?.socketId).emit(
-        'typing-response',
-        text
-      );
+    socket.on('typing', ({ receiverId, text }) => {
+      io.to(users.get(receiverId)?.socketId).emit('start-typing', text);
     });
 
-    socket.on('stop-typing', ({ senderId, receiverEmail }) => {
-      io.to(findReceiver(receiverEmail)?.socketId).emit('stop-typing');
+    socket.on('stop-typing', (receiverId) => {
+      io.to(users.get(receiverId)?.socketId).emit('stop-typing');
     });
 
-    socket.on('disconnect', () => removeUser(socket.id));
+    socket.on('end', () => {
+      console.log('disconnect');
+      socket.disconnect();
+    });
+
+    socket.on('disconnect', () => {
+      removeUser(socket.id);
+      console.log(`disconnected: ${socket.id}`);
+    });
   });
 };
 
 const findReceiver = (email) => users.get(email);
-
-const addUser = (data) =>
-  !users.has(data?.email) && users.set(data?.email, data);
 
 const removeUser = (id) =>
   users.forEach((value, key) => value?.socketId === id && users.delete(key));
