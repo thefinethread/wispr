@@ -2,10 +2,16 @@ import { Link } from "react-router-dom";
 import { RiPushpinFill } from "react-icons/ri";
 import NoProfilePic from "../../assets/images/no-profile-pic.jpg";
 import { useSelector } from "react-redux";
+import { useMemo } from "react";
 
 const ChatCard = ({ _id, members, lastMessage }) => {
-  const { senderId, text } = useSelector(
-    (state) => state.messageReducer.typing,
+  const { typing } = useSelector((state) => state.conversationReducer);
+
+  const receiver = members?.[0];
+
+  const checkTyping = useMemo(
+    () => typing.find((el) => el?.senderId === receiver?._id),
+    [typing, receiver?._id],
   );
 
   return (
@@ -14,22 +20,20 @@ const ChatCard = ({ _id, members, lastMessage }) => {
         <div className="flex h-full flex-1 items-center  gap-2 overflow-hidden">
           <img
             className="aspect-square h-full rounded-full object-cover"
-            src={members?.[0]?.profilePhoto || NoProfilePic}
+            src={receiver?.profilePhoto || NoProfilePic}
             alt=""
           />
           <div className="flex flex-col justify-center gap-1 overflow-hidden">
             <div className="text-base font-normal leading-tight">
-              {members?.[0]?.username}
+              {receiver?.username}
             </div>
             <div className="flex overflow-hidden text-[13px] font-normal text-zinc-500">
               <p
                 className={`min-w-0  flex-1 overflow-hidden text-ellipsis whitespace-nowrap ${
-                  text ? "text-skin-primary" : ""
+                  checkTyping ? "text-skin-primary" : ""
                 }`}
               >
-                {members?.[0]?._id === senderId && text
-                  ? text
-                  : lastMessage?.text || ""}
+                {checkTyping ? checkTyping?.text : lastMessage?.text || ""}
               </p>
               {/* <span>-{lastMessage?.createdAt?.slice(0, 2)}</span> */}
             </div>

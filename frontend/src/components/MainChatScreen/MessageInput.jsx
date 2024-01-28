@@ -52,10 +52,10 @@ const MessageInput = () => {
         text: "typing...",
       });
 
-      timeout = setTimeout(timeoutFunction, 2000);
+      timeout = setTimeout(timeoutFunction, 3000);
     } else {
       clearTimeout(timeout);
-      setTimeout(timeoutFunction, 2000);
+      setTimeout(timeoutFunction, 3000);
     }
   };
 

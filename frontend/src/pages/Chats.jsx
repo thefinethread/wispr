@@ -2,8 +2,12 @@ import { useEffect } from "react";
 import MainChatScreen from "../components/chats/MainChatScreen";
 import SideNavigation from "../components/chats/SideNavigation";
 import socket from "../config/socketConfig";
-import { newMessage, typing } from "../features/messages/messageSlice";
+import { newMessage } from "../features/messages/messageSlice";
 import { useDispatch } from "react-redux";
+import {
+  startTyping,
+  stopTyping,
+} from "../features/conversations/conversationSlice";
 
 const Chats = () => {
   const dispatch = useDispatch();
@@ -23,11 +27,9 @@ const Chats = () => {
     socket.on("my-message", (data) => dispatch(newMessage(data)));
 
     socket.on("start-typing", ({ senderId, text }) =>
-      dispatch(typing({ senderId, text })),
+      dispatch(startTyping({ senderId, text })),
     );
-    socket.on("stop-typing", ({ senderId }) =>
-      dispatch(typing({ senderId, text: "" })),
-    );
+    socket.on("stop-typing", ({ senderId }) => dispatch(stopTyping(senderId)));
 
     return () => {
       socket.disconnect(); // disconnect socket once user leaves the component

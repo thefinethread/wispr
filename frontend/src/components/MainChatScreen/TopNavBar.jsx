@@ -4,15 +4,19 @@ import { useGetConversationQuery } from "../../features/conversations/conversati
 import NoProfilePic from "../../assets/images/no-profile-pic.jpg";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useMemo } from "react";
 
 const TopNavBar = ({ openChatInfo }) => {
   const { conversationId } = useParams();
-  const { senderId, text } = useSelector(
-    (state) => state.messageReducer.typing,
-  );
+  const { typing } = useSelector((state) => state.conversationReducer);
   const { data: conversation } = useGetConversationQuery({ conversationId });
 
   const receiver = conversation?.members?.[0];
+
+  const checkTyping = useMemo(
+    () => typing.find((el) => el?.senderId === receiver?._id),
+    [typing, receiver?._id],
+  );
 
   return (
     <div className="flex h-14 w-full items-center justify-between bg-white pl-1 pr-2 shadow">
@@ -24,9 +28,9 @@ const TopNavBar = ({ openChatInfo }) => {
         />
         <div className="flex flex-col justify-center font-normal">
           <span className="text-base leading-tight">{receiver?.username}</span>
-          {receiver?._id === senderId && text && (
+          {checkTyping && (
             <span className="text-[13px] font-normal text-zinc-400">
-              {text}
+              {checkTyping?.text}
             </span>
           )}
         </div>
