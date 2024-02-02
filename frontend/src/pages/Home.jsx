@@ -3,8 +3,8 @@ import AuthPageImage from "../assets/images/homescreen.png";
 import Modal from "../commonComponents/Modal/Modal";
 import Logo from "../assets/images/logo.png";
 import ButtonStyled from "../commonComponents/styledComponents/ButtonStyled";
-import SignUpForm from "../components/Form/SignUpForm";
-import LogInForm from "../components/Form/LogInForm";
+import SignUpForm from "../components/Auth/SignUpForm";
+import LogInForm from "../components/Auth/LogInForm";
 import { Link } from "react-router-dom";
 
 const Home = () => {

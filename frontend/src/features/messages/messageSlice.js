@@ -1,11 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  conversationId: "",
   messages: [],
-  typing: {
-    senderId: "",
-    text: "",
-  },
 };
 
 const messageSlice = createSlice({
@@ -13,13 +10,13 @@ const messageSlice = createSlice({
   initialState,
   reducers: {
     getMessages: (state, action) => {
-      state.messages = [...action.payload];
+      state.messages = action.payload.data;
+      state.conversationId = action.payload.conversationId;
     },
     newMessage: (state, action) => {
-      state.messages = [...state.messages, action.payload];
-    },
-    typing: (state, action) => {
-      state.typing = action.payload;
+      if (state.conversationId === action.payload?.conversationId) {
+        state.messages = [...state.messages, action.payload];
+      }
     },
   },
 });

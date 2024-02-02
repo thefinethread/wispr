@@ -4,13 +4,13 @@ import { Outlet, useNavigate } from "react-router-dom";
 
 const PrivateRoute = () => {
   const navigate = useNavigate();
-  const { userInfo } = useSelector((state) => state.auth);
+  const { currentUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!userInfo) {
+    if (!currentUser) {
       navigate("/");
     }
-  }, [userInfo, navigate]);
+  }, [currentUser, navigate]);
 
   return <Outlet />;
 };

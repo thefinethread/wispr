@@ -3,6 +3,7 @@ const Message = require('../models/Message');
 const apiResponse = require('../utils/apiResponse');
 const { default: mongoose } = require('mongoose');
 const { SERVER_ERROR } = require('../constants/commonMessages');
+const Conversation = require('../models/Conversation');
 
 /**
  * Desc - get all the messages of a conversation
@@ -95,6 +96,10 @@ const saveMessage = asyncHandler(async (conversationId, senderId, text) => {
   });
 
   if (message) {
+    await Conversation.findByIdAndUpdate(conversationId, {
+      $push: { messages: message._id },
+    });
+
     return message;
     // apiResponse(res, 200, 'OK', message);
   } else {

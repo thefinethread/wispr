@@ -1,8 +1,8 @@
 import { useState } from "react";
-import ChatList from "../ChatList/ChatList";
-import TopHeader from "../SideNavigation/TopHeader";
+import ConversationList from "./ConversationList";
+import TopHeader from "./TopHeader";
 
-const SideNavigation = () => {
+const ConversationsPanel = () => {
   const [isProfileSliderOpen, setIsProfileSliderOpen] = useState(false);
 
   const openProfileSlider = () => {
@@ -17,9 +17,9 @@ const SideNavigation = () => {
       ></section>
 
       <TopHeader openProfileSlider={openProfileSlider} />
-      <ChatList />
+      <ConversationList />
     </section>
   );
 };
 
-export default SideNavigation;
+export default ConversationsPanel;

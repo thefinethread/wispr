@@ -14,20 +14,18 @@ import socket from "../../config/socketConfig";
 import { useGetConversationQuery } from "../../features/conversations/conversationApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { newMessage } from "../../features/messages/messageSlice";
+import { updateConversationList } from "../../features/conversations/conversationSlice";
 
 const typingStatus = {
   typing: true,
   currentTime: new Date().getTime(),
 };
 
-const MessageInput = () => {
+const ChatFooter = () => {
   const [text, setText] = useState("");
-  const { conversationId } = useParams();
   const dispatch = useDispatch();
 
-  const { userInfo } = useSelector((state) => state.auth);
-
-  const { data: conversation } = useGetConversationQuery({ conversationId });
+  const { currentConversation } = useSelector((state) => state.app);
 
   let typing = false;
   let timeout = undefined;
@@ -35,8 +33,8 @@ const MessageInput = () => {
   const timeoutFunction = () => {
     typing = false;
     socket.emit("stop-typing", {
-      senderId: userInfo?._id,
-      receiverId: conversation?.members?.[0]?._id,
+      senderId: currentConversation?.currentUser?._id,
+      receiverId: currentConversation?.otherUser?._id,
     });
   };
 
@@ -47,28 +45,33 @@ const MessageInput = () => {
       typing = true;
 
       socket.emit("typing", {
-        senderId: userInfo?._id,
-        receiverId: conversation?.members?.[0]?._id,
+        senderId: currentConversation?.currentUser?._id,
+        receiverId: currentConversation?.otherUser?._id,
         text: "typing...",
       });
 
-      timeout = setTimeout(timeoutFunction, 3000);
+      timeout = setTimeout(timeoutFunction, 2000);
     } else {
       clearTimeout(timeout);
-      setTimeout(timeoutFunction, 3000);
+      setTimeout(timeoutFunction, 2000);
     }
   };
 
   const handleSendMessage = (e) => {
     if (e.key === "Enter" && e.target.value.trim()) {
       const message = {
-        conversationId,
-        senderId: userInfo?._id,
-        receiverId: conversation?.members?.[0]?._id,
+        conversationId: currentConversation?._id,
+        senderId: currentConversation?.currentUser?._id,
+        receiverId: currentConversation?.otherUser?._id,
         text,
       };
-      socket.emit("send-message", message);
+
       clearTimeout(timeout);
+      timeoutFunction();
+      socket.emit("send-message", message, (data) => {
+        dispatch(newMessage(data));
+        dispatch(updateConversationList(data));
+      });
       setText("");
     }
   };
@@ -101,4 +104,4 @@ const MessageInput = () => {
   );
 };
 
-export default MessageInput;
+export default ChatFooter;

@@ -1,22 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import ChatIconStyled from "../../commonComponents/styledComponents/MainChatScreen/ChatIconStyled";
 import { FaEllipsisVertical, FaRegFaceSmile } from "react-icons/fa6";
-import NoProfilePic from "../../assets/images/no-profile-pic.jpg";
-import socket from "../../config/socketConfig";
+import NoProfilePic from "../../assets/images/no-profile-photo.png";
 import { useDispatch, useSelector } from "react-redux";
-import { newMessage } from "../../features/messages/messageSlice";
 
-const userId = JSON.parse(localStorage.getItem("userInfo"))?._id || "";
-
-const isMyText = (sender) => userId === sender;
-
-const ChatMessage = ({ text, sender, createdAt, member }) => {
+const ChatMessage = ({ text, senderId, createdAt, updatedAt, _id }) => {
   const [isHovered, setIsHovered] = useState(false);
-
+  const chatRef = useRef();
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.auth);
+  const { currentConversation } = useSelector((state) => state.app);
   const messageList = useSelector((state) => state.messageReducer.messages);
 
-  const chatRef = useRef();
+  const isMyText = () => currentUser?._id === senderId;
 
   useEffect(() => {
     chatRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -28,13 +24,13 @@ const ChatMessage = ({ text, sender, createdAt, member }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`my-1 flex items-center justify-end gap-2 ${
-        isMyText(sender) ? "flex-row" : "flex-row-reverse"
+        isMyText(senderId) ? "flex-row" : "flex-row-reverse"
       }`}
     >
       {isHovered && (
         <ul
           className={`flex items-center${
-            isMyText(sender) ? "flex-row-reverse" : ""
+            isMyText(senderId) ? "flex-row-reverse" : ""
           }`}
         >
           <ChatIconStyled
@@ -54,15 +50,15 @@ const ChatMessage = ({ text, sender, createdAt, member }) => {
 
       <p
         className={`max-w-[50%] rounded-[18px] px-3 py-2 ${
-          isMyText(sender) ? "bg-skin-primary text-white" : "bg-zinc-100"
+          isMyText(senderId) ? "bg-skin-primary text-white" : "bg-zinc-100"
         }`}
       >
         {text}
       </p>
-      {!isMyText(sender) && (
+      {!isMyText(senderId) && (
         <img
           className="h-7 w-7 self-end rounded-full object-cover"
-          src={member?.profilePhoto || NoProfilePic}
+          src={currentConversation?.otherUser?.profilePic || NoProfilePic}
           alt=""
         />
       )}

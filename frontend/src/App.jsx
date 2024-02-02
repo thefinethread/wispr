@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Chats from "./pages/Chats";
+import AppDashboard from "./pages/AppDashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 
@@ -12,8 +12,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         {/* Private Routes */}
         <Route path="/" element={<PrivateRoute />}>
-          <Route path="chats" element={<Chats />} />
-          <Route path="chats/:conversationId" element={<Chats />} />
+          <Route path="chats" element={<AppDashboard />} />
         </Route>
       </Routes>
     </BrowserRouter>

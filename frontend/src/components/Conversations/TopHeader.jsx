@@ -4,12 +4,12 @@ import ChatIconStyled from "../../commonComponents/styledComponents/MainChatScre
 
 const TopHeader = ({ openProfileSlider }) => {
   return (
-    <div className="px-5">
+    <div className="px-[10px]">
       <nav className="flex h-14 items-center justify-between">
         <img
           onClick={openProfileSlider}
           className="h-10 w-10 cursor-pointer rounded-full"
-          src={JSON.parse(localStorage.getItem("userInfo"))?.profilePhoto}
+          src={JSON.parse(localStorage.getItem("currentUser"))?.profilePhoto}
           alt=""
         />
         <ul>
@@ -23,10 +23,10 @@ const TopHeader = ({ openProfileSlider }) => {
       </nav>
       <div className="flex w-full justify-center py-2">
         <div className="relative w-full">
-          <RiArrowLeftLine
+          {/* <RiArrowLeftLine
             size="1.1rem"
             className="absolute left-3 top-0 translate-y-[calc(16px_-_50%)] text-zinc-600"
-          />
+          /> */}
           <RiSearchLine
             size="1.1rem"
             className="absolute left-3 top-0 translate-y-[calc(16px_-_50%)] text-zinc-600"

@@ -1,26 +1,25 @@
 import { useParams } from "react-router-dom";
-import TopNavBar from "../MainChatScreen/TopNavBar";
-import ConversationWindow from "../MainChatScreen/ConversationWindow";
-import MessageInput from "../MainChatScreen/MessageInput";
+import ChatHeader from "./ChatHeader";
+import ChatMessages from "./ChatMessagesList";
+import ChatFooter from "./ChatFooter";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-const MainChatScreen = () => {
+const ChatScreen = () => {
   const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
 
-  const { conversationId } = useParams();
+  const { currentConversation } = useSelector((state) => state.app);
 
   const openChatInfo = () => setIsChatInfoOpen((prev) => !prev);
 
   return (
     <section className="flex h-full w-full">
-      {conversationId === "home" ? (
-        <p>Click on any chat</p>
-      ) : (
+      {currentConversation ? (
         <>
           <section className="flex h-full flex-1 flex-col">
-            <TopNavBar openChatInfo={openChatInfo} />
-            <ConversationWindow />
-            <MessageInput />
+            <ChatHeader openChatInfo={openChatInfo} />
+            <ChatMessages />
+            <ChatFooter />
           </section>
           <section
             className={`h-full ${
@@ -28,9 +27,11 @@ const MainChatScreen = () => {
             } bg-purple-400 transition-all`}
           ></section>
         </>
+      ) : (
+        <p>Click on any chat</p>
       )}
     </section>
   );
 };
 
-export default MainChatScreen;
+export default ChatScreen;
