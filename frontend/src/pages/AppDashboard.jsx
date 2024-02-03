@@ -8,8 +8,10 @@ import {
   getAllConversations,
   startTyping,
   stopTyping,
+  updateConversationDetail,
   updateConversationList,
 } from "../features/conversations/conversationSlice";
+import { updateOtherUserInCurrentConversation } from "../features/app/appSlice";
 
 const AppDashboard = () => {
   const dispatch = useDispatch();
@@ -42,6 +44,11 @@ const AppDashboard = () => {
     );
 
     socket.on("stop-typing", ({ senderId }) => dispatch(stopTyping(senderId)));
+
+    socket.on("other-user-profile-updated", (data) => {
+      dispatch(updateConversationDetail(data));
+      dispatch(updateOtherUserInCurrentConversation(data));
+    });
 
     return () => {
       socket.disconnect(); // disconnect socket once user leaves the component

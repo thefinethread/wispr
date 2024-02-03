@@ -52,6 +52,22 @@ const socketServer = (server) => {
     // add socket id to db of the connected user
     updateSocketId();
 
+    socket.on(
+      'update-user-profile',
+      async ({ userId, fieldName, fieldValue }, cb) => {
+        const res = await User.findByIdAndUpdate(
+          userId,
+          { [fieldName]: fieldValue },
+          { new: true }
+        ).select(`${fieldName}`);
+
+        // send acknowledgment to current user
+        cb(res);
+        // emit event to other clients
+        socket.broadcast.emit('other-user-profile-updated', res);
+      }
+    );
+
     // get all conversations
     socket.on('all-conversations', getAllConversations);
 

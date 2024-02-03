@@ -11,9 +11,21 @@ const appSlice = createSlice({
     setCurrentConversation: (state, action) => {
       state.currentConversation = action.payload;
     },
+
+    updateOtherUserInCurrentConversation: (state, action) => {
+      if (state.currentConversation) {
+        const { otherUser, ...rest } = state.currentConversation;
+
+        state.currentConversation = {
+          ...rest,
+          otherUser: { ...otherUser, ...action.payload },
+        };
+      }
+    },
   },
 });
 
 export default appSlice.reducer;
 
-export const { setCurrentConversation } = appSlice.actions;
+export const { setCurrentConversation, updateOtherUserInCurrentConversation } =
+  appSlice.actions;

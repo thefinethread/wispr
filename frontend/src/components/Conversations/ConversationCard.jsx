@@ -31,8 +31,6 @@ const ChatCard = ({
           username: otherUserName,
           profilePic: otherUserProfilePic,
         },
-        lastMessage,
-        lastMessageTime,
       }),
     );
   };

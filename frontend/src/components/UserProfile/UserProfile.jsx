@@ -6,9 +6,12 @@ import {
   FaRegUser,
 } from "react-icons/fa6";
 import { RiCameraLine, RiInformationLine, RiPencilLine } from "react-icons/ri";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import socket from "../../config/socketConfig";
+import { updateUserInfo } from "../../features/auth/authSlice";
 
 const UserProfile = ({ isOpen, closeProfileSlider }) => {
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
 
   const usernameRef = useRef();
@@ -23,25 +26,6 @@ const UserProfile = ({ isOpen, closeProfileSlider }) => {
   const [isAboutEditMode, setIsAboutEditMode] = useState(false);
   const [isEmailEditMode, setIsEmailEditMode] = useState(false);
 
-  const handleUpdate = (e) => {
-    switch (e.target.id) {
-      case "username":
-        console.log(username);
-        setIsUsernameEditMode(false);
-        break;
-      case "about":
-        console.log(about);
-        setIsAboutEditMode(false);
-        break;
-      case "email":
-        console.log(email);
-        setIsEmailEditMode(false);
-        break;
-      default:
-        console.log("default");
-    }
-  };
-
   const userDetails = [
     {
       id: "username",
@@ -52,7 +36,8 @@ const UserProfile = ({ isOpen, closeProfileSlider }) => {
       inputRef: usernameRef,
       isEditMode: isUsernameEditMode,
       handleChange: (e) => setUsername(e.target.value),
-      handleUpdate: handleUpdate,
+      handleUpdate: () =>
+        updateInput("username", username, setIsUsernameEditMode),
       handleEditMode: () => {
         usernameRef.current.focus();
         setIsUsernameEditMode((prev) => !prev);
@@ -67,7 +52,7 @@ const UserProfile = ({ isOpen, closeProfileSlider }) => {
       inputRef: aboutRef,
       isEditMode: isAboutEditMode,
       handleChange: (e) => setAbout(e.target.value),
-      handleUpdate: handleUpdate,
+      handleUpdate: () => updateInput("about", about, setIsAboutEditMode),
       handleEditMode: () => {
         aboutRef.current.focus();
         setIsAboutEditMode((prev) => !prev);
@@ -82,13 +67,28 @@ const UserProfile = ({ isOpen, closeProfileSlider }) => {
       inputRef: emailRef,
       isEditMode: isEmailEditMode,
       handleChange: (e) => setEmail(e.target.value),
-      handleUpdate: handleUpdate,
+      handleUpdate: () => updateInput("email", email, setIsEmailEditMode),
       handleEditMode: () => {
         emailRef.current.focus();
         setIsEmailEditMode((prev) => !prev);
       },
     },
   ];
+
+  const updateInput = (fieldName, fieldValue, setIsEditMode) => {
+    if (currentUser?.[fieldName] === fieldValue) {
+      setIsEditMode(false);
+      return;
+    }
+
+    socket.emit(
+      "update-user-profile",
+      { userId: currentUser?._id, fieldName, fieldValue },
+      (data) => dispatch(updateUserInfo(data)),
+    );
+
+    setIsEditMode(false);
+  };
 
   useEffect(() => {
     console.log("mounted");

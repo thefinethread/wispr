@@ -58,6 +58,30 @@ const conversationSlice = createSlice({
         });
       }
     },
+    updateConversationDetail: (state, action) => {
+      const { _id, ...rest } = action.payload;
+
+      const index = state.conversations.findIndex(
+        (el) => el.otherUserId === _id,
+      );
+
+      const fieldsMapping = {
+        username: "otherUserName",
+        profilePhoto: "otherUserProfilePic",
+      };
+
+      if (index !== -1) {
+        const conversation = { ...state.conversations[index] };
+
+        Object.keys(rest).forEach((key) => {
+          const stateFieldName = fieldsMapping[key];
+
+          if (stateFieldName) conversation[stateFieldName] = rest[key];
+        });
+
+        state.conversations.splice(index, 1, conversation);
+      }
+    },
   },
 });
 
@@ -68,4 +92,5 @@ export const {
   stopTyping,
   getAllConversations,
   updateConversationList,
+  updateConversationDetail,
 } = conversationSlice.actions;
