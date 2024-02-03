@@ -14,7 +14,7 @@ const ChatMessagesList = () => {
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.messageReducer);
   const { currentConversation } = useSelector((state) => state.app);
-
+  console.log("messages", messages?.slice()?.reverse());
   const typingRef = useRef();
 
   useEffect(() => {
@@ -33,14 +33,14 @@ const ChatMessagesList = () => {
   }, [typing]);
 
   return (
-    <div className="w-full flex-1 items-end overflow-y-auto px-3">
-      <ul className="relative flex h-full w-full flex-col">
+    <div className="w-full flex-1 items-end overflow-hidden px-3">
+      <ul className="relative flex h-full w-full flex-col-reverse overflow-y-auto">
         {!messages ? (
           <Spinner color="border-zinc-400" size="h-7 w-7" className=" m-auto" />
         ) : (
-          messages?.map((message) => (
-            <ChatMessage key={message._id} {...message} />
-          ))
+          messages
+            ?.toReversed()
+            ?.map((message) => <ChatMessage key={message._id} {...message} />)
         )}
         {typing && (
           <p ref={typingRef} className="italic text-skin-primary">

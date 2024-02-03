@@ -14,9 +14,9 @@ const ChatMessage = ({ text, senderId, createdAt, updatedAt, _id }) => {
 
   const isMyText = () => currentUser?._id === senderId;
 
-  useEffect(() => {
-    chatRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messageList]);
+  // useEffect(() => {
+  //   chatRef.current?.scrollIntoView({ behavior: "smooth" });
+  // }, [messageList]);
 
   return (
     <li

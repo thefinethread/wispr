@@ -4,6 +4,7 @@ import ChatMessages from "./ChatMessagesList";
 import ChatFooter from "./ChatFooter";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import NoConversation from "../NoConversation";
 
 const ChatScreen = () => {
   const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
@@ -13,7 +14,7 @@ const ChatScreen = () => {
   const openChatInfo = () => setIsChatInfoOpen((prev) => !prev);
 
   return (
-    <section className="flex h-full w-full">
+    <section className="flex h-full flex-1">
       {currentConversation ? (
         <>
           <section className="flex h-full flex-1 flex-col">
@@ -28,7 +29,7 @@ const ChatScreen = () => {
           ></section>
         </>
       ) : (
-        <p>Click on any chat</p>
+        <NoConversation />
       )}
     </section>
   );
