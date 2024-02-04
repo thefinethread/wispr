@@ -5,6 +5,7 @@ import NoProfilePic from "../../assets/images/no-profile-photo.png";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMemo } from "react";
+import ImageWithOnlineIcon from "../../commonComponents/ImageWithOnlineIcon";
 
 const ChatHeader = ({ openChatInfo }) => {
   const { typing } = useSelector((state) => state.conversationReducer);
@@ -19,10 +20,10 @@ const ChatHeader = ({ openChatInfo }) => {
   return (
     <div className="flex h-14 w-full items-center justify-between bg-white pl-1 pr-2 shadow">
       <div className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-zinc-100">
-        <img
-          className="h-10 w-10 rounded-full object-cover"
-          src={currentConversation?.otherUser?.profilePic || NoProfilePic}
-          alt=""
+        <ImageWithOnlineIcon
+          imgSize="h-10 w-10"
+          imgSrc={currentConversation?.otherUser?.profilePic}
+          isOnline={currentConversation?.otherUser?.online}
         />
         <div className="flex flex-col justify-center font-normal">
           <span className="text-base leading-tight">

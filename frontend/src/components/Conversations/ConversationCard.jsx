@@ -4,11 +4,14 @@ import NoProfilePic from "../../assets/images/no-profile-photo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useMemo } from "react";
 import { setCurrentConversation } from "../../features/app/appSlice";
+import OnlineIcon from "../../commonComponents/ImageWithOnlineIcon";
+import ImageWithOnlineIcon from "../../commonComponents/ImageWithOnlineIcon";
 
 const ChatCard = ({
   _id,
   otherUserId,
   otherUserName,
+  otherUserOnline,
   otherUserProfilePic,
   lastMessage,
   lastMessageTime,
@@ -30,6 +33,7 @@ const ChatCard = ({
           _id: otherUserId,
           username: otherUserName,
           profilePic: otherUserProfilePic,
+          online: otherUserOnline,
         },
       }),
     );
@@ -45,15 +49,15 @@ const ChatCard = ({
     <div
       onClick={handleCurrentConversation}
       className={`hover flex h-[72px] w-full cursor-pointer items-center justify-between gap-2 rounded-lg px-3 py-3 transition-colors hover:bg-zinc-100 ${
-        currentConversation?._id === _id ? "bg-zinc-200" : ""
+        currentConversation?._id === _id ? "bg-zinc-300/40" : ""
       }`}
     >
       <div className="flex h-full flex-1 items-center  gap-2 overflow-hidden">
-        <img
-          className="aspect-square h-full rounded-full object-cover"
-          src={otherUserProfilePic || NoProfilePic}
-          alt=""
+        <ImageWithOnlineIcon
+          imgSrc={otherUserProfilePic}
+          isOnline={otherUserOnline}
         />
+
         <div className="flex flex-col justify-center gap-1 overflow-hidden">
           <div className="text-base font-normal leading-tight">
             {otherUserName}

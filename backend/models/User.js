@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema(
     socketId: {
       type: String,
     },
+    online: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   {

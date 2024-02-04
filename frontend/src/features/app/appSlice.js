@@ -13,7 +13,10 @@ const appSlice = createSlice({
     },
 
     updateOtherUserInCurrentConversation: (state, action) => {
-      if (state.currentConversation) {
+      if (
+        state.currentConversation &&
+        state.currentConversation?.otherUser?._id === action.payload._id
+      ) {
         const { otherUser, ...rest } = state.currentConversation;
 
         state.currentConversation = {

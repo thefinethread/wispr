@@ -35,6 +35,7 @@ const conversationSlice = createSlice({
           lastMessageTime: conversation.messages?.[0]?.createdAt || "",
           otherUserId: otherUser?._id,
           otherUserName: otherUser?.username,
+          otherUserOnline: otherUser?.online,
           otherUserProfilePic: otherUser?.profilePhoto,
         };
       });
@@ -68,6 +69,7 @@ const conversationSlice = createSlice({
       const fieldsMapping = {
         username: "otherUserName",
         profilePhoto: "otherUserProfilePic",
+        online: "otherUserOnline",
       };
 
       if (index !== -1) {

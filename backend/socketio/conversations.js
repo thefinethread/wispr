@@ -5,7 +5,7 @@ const getAllConversations = asyncHandler(async (_id, cb) => {
   const conversations = await Conversation.find({
     members: { $in: [_id] },
   })
-    .populate('members', '_id username email profilePhoto')
+    .populate('members', '_id username email profilePhoto online')
     .populate({
       path: 'messages',
       options: { limit: 1, sort: { createdAt: -1 } },

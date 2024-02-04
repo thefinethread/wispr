@@ -24,6 +24,11 @@ const AppDashboard = () => {
       console.log("connected - ", socket.id);
     });
 
+    socket.on("active-status", (data) => {
+      dispatch(updateConversationDetail(data));
+      dispatch(updateOtherUserInCurrentConversation(data));
+    });
+
     socket.emit("all-conversations", currentUser?._id, (data) => {
       // receiving conversations as acknowledgment
       console.log(data);

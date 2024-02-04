@@ -5,6 +5,7 @@ const User = require('../models/User');
 const Conversation = require('../models/Conversation');
 const { sendMessage, getMessages } = require('./messages');
 const { getAllConversations } = require('./conversations');
+const { updateSocketIdAndOnlineStatus } = require('./users');
 
 let users = new Map();
 
@@ -36,21 +37,14 @@ const socketServer = (server) => {
     });
   });
 
-  const updateSocketId = async () => {
-    await User.findByIdAndUpdate(
-      currentUser?._id,
-      {
-        socketId: currentUser?.socketId,
-      },
-      { new: true }
-    );
-  };
-
   io.on('connection', async (socket) => {
     console.log(`connected: ${socket.id}`);
 
-    // add socket id to db of the connected user
-    updateSocketId();
+    // updated socket id & online status to db of the connected user and broadcast status
+    updateSocketIdAndOnlineStatus(
+      { _id: currentUser?._id, online: true, socketId: currentUser?.socketId },
+      socket
+    );
 
     socket.on(
       'update-user-profile',
@@ -88,13 +82,21 @@ const socketServer = (server) => {
       io.to(users.get(receiverId)?.socketId).emit('stop-typing', { senderId });
     });
 
-    socket.on('end', () => {
-      console.log('disconnect');
-      socket.disconnect();
-    });
+    // socket.on('end', () => {
+    //   console.log('disconnect');
+    //   socket.disconnect();
+    // });
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
       console.log(`disconnected: ${socket.id}`);
+
+      updateSocketIdAndOnlineStatus(
+        {
+          socketId: socket.id,
+          online: false,
+        },
+        socket
+      );
     });
   });
 
