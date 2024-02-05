@@ -1,8 +1,15 @@
 import { FaEllipsisVertical } from "react-icons/fa6";
-import { RiMore2Fill, RiSearchLine, RiArrowLeftLine } from "react-icons/ri";
+import {
+  RiMore2Fill,
+  RiSearchLine,
+  RiArrowLeftLine,
+  RiChatNewLine,
+} from "react-icons/ri";
+import { Icon } from "@iconify/react";
 import ChatIconStyled from "../../commonComponents/styledComponents/MainChatScreen/ChatIconStyled";
+import IconButton from "../../commonComponents/IconButton";
 
-const TopHeader = ({ openProfileSlider }) => {
+const TopHeader = ({ openProfileSlider, openAddNewChat }) => {
   return (
     <div className="px-[10px]">
       <nav className="flex h-14 items-center justify-between">
@@ -12,13 +19,13 @@ const TopHeader = ({ openProfileSlider }) => {
           src={JSON.parse(localStorage.getItem("currentUser"))?.profilePhoto}
           alt=""
         />
-        <ul>
-          <ChatIconStyled
-            icon={FaEllipsisVertical}
-            iconSize="1.2rem"
-            className="translate-x-3"
-            color="text-zinc-700"
+        <ul className="flex">
+          <IconButton
+            onClick={openAddNewChat}
+            icon={RiChatNewLine}
+            iconColor="text-zinc-800"
           />
+          <IconButton icon={RiMore2Fill} iconColor="text-zinc-800" />
         </ul>
       </nav>
       <div className="flex w-full justify-center py-2">

@@ -9,6 +9,7 @@ import { RiCameraLine, RiInformationLine, RiPencilLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import socket from "../../config/socketConfig";
 import { updateUserInfo } from "../../features/auth/authSlice";
+import IconButton from "../../commonComponents/IconButton";
 
 const UserProfile = ({ isOpen, closeProfileSlider }) => {
   const dispatch = useDispatch();
@@ -106,7 +107,11 @@ const UserProfile = ({ isOpen, closeProfileSlider }) => {
       } `}
     >
       <header className="flex h-20 w-full items-center gap-5 bg-skin-primary px-4 text-lg text-white">
-        <FaArrowLeft className="cursor-pointer" onClick={closeProfileSlider} />
+        <IconButton
+          icon={FaArrowLeft}
+          onClick={closeProfileSlider}
+          hoverBgColor="hover:bg-black/10"
+        />
         Profile
       </header>
       <div className="my-8">
@@ -116,7 +121,8 @@ const UserProfile = ({ isOpen, closeProfileSlider }) => {
             className=" h-32 w-32 rounded-full"
             alt=""
           />
-          <div className="absolute bottom-0 right-0 flex h-10 w-10 items-center justify-center rounded-full bg-skin-primary">
+
+          <div className="absolute bottom-0 right-0 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-skin-primary">
             <RiCameraLine size="1.2rem" className="text-white" />
           </div>
         </div>
@@ -145,17 +151,17 @@ const UserProfile = ({ isOpen, closeProfileSlider }) => {
               />
             </div>
             {el.isEditMode ? (
-              <FaCheck
+              <IconButton
                 id={el.id}
                 onClick={el.handleUpdate}
-                size="1.2rem"
-                className="cursor-pointer text-skin-primary"
+                icon={FaCheck}
+                iconColor="text-skin-primary"
               />
             ) : (
-              <RiPencilLine
+              <IconButton
                 onClick={el.handleEditMode}
-                size="1.2rem"
-                className="cursor-pointer text-skin-primary"
+                icon={RiPencilLine}
+                iconColor="text-skin-primary"
               />
             )}
           </li>

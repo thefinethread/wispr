@@ -141,4 +141,36 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { register, login, logout, refreshAccessToken };
+/**
+ * POST /api/users/search
+ * get users
+ * private
+ */
+const searchUsers = asyncHandler(async (req, res) => {
+  const { q } = req.query;
+
+  if (!q) {
+    res.status(400);
+    throw new Error(`searchQuery('q') is required`);
+  }
+
+  if (q?.trim()?.length < 3) {
+    res.status(400);
+    throw new Error('Please enter at least 3 characters');
+  }
+
+  const data = await User.find({
+    $or: [
+      {
+        username: { $regex: q, $options: 'i' },
+      },
+      {
+        email: { $regex: q, $options: 'i' },
+      },
+    ],
+  }).select('_id username email profilePhoto online');
+
+  apiResponse(res, 200, 'OK', data);
+});
+
+module.exports = { register, login, logout, refreshAccessToken, searchUsers };
