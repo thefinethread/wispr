@@ -17,7 +17,16 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    searchUser: builder.mutation({
+      query: ({ queryTerm }) => ({
+        url: `${USER_URL}/search`,
+        method: "POST",
+        params: { q: queryTerm },
+      }),
+      transformResponse: (res) => res.data,
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation } = usersApiSlice;
+export const { useRegisterMutation, useLoginMutation, useSearchUserMutation } =
+  usersApiSlice;
