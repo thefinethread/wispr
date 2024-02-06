@@ -21,6 +21,8 @@ const ChatCard = ({
   const { currentUser } = useSelector((state) => state.auth);
 
   const handleCurrentConversation = () => {
+    if (currentConversation?._id === _id) return;
+
     dispatch(
       setCurrentConversation({
         _id,

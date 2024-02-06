@@ -1,11 +1,8 @@
-import { useParams } from "react-router-dom";
 import ChatMessage from "./ChatMessage";
-import { useGetMessagesQuery } from "../../features/messages/messagesApiSlice";
 import Spinner from "../../commonComponents/Spinners/Spinner";
-import { useGetConversationQuery } from "../../features/conversations/conversationApiSlice";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { newMessage, getMessages } from "../../features/messages/messageSlice";
+import { getMessages } from "../../features/messages/messageSlice";
 import socket from "../../config/socketConfig";
 
 const ChatMessagesList = () => {
@@ -14,10 +11,10 @@ const ChatMessagesList = () => {
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.messageReducer);
   const { currentConversation } = useSelector((state) => state.app);
-  console.log("messages", messages?.slice()?.reverse());
   const typingRef = useRef();
 
   useEffect(() => {
+    console.log(currentConversation?._id);
     socket.emit(
       "get-messages",
       { conversationId: currentConversation?._id },

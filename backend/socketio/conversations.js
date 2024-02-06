@@ -12,7 +12,7 @@ const getAllConversations = asyncHandler(async (_id, cb) => {
       select: '_id text sender createdAt',
     })
     .sort({ updatedAt: -1 });
-
+  console.log(conversations);
   cb(conversations);
 });
 

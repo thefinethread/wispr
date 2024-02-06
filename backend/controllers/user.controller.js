@@ -160,12 +160,19 @@ const searchUsers = asyncHandler(async (req, res) => {
   }
 
   const data = await User.find({
-    $or: [
+    $and: [
       {
-        username: { $regex: q, $options: 'i' },
+        _id: { $ne: req.user._id },
       },
       {
-        email: { $regex: q, $options: 'i' },
+        $or: [
+          {
+            username: { $regex: q, $options: 'i' },
+          },
+          {
+            email: { $regex: q, $options: 'i' },
+          },
+        ],
       },
     ],
   }).select('_id username email profilePhoto online');

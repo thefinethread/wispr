@@ -14,8 +14,15 @@ const messageSlice = createSlice({
       state.conversationId = action.payload.conversationId;
     },
     newMessage: (state, action) => {
-      if (state.conversationId === action.payload?.conversationId) {
-        state.messages = [...state.messages, action.payload];
+      const { message, newChat } = action.payload;
+
+      if (newChat) {
+        state.conversationId = message?.conversationId;
+        state.messages.push(message);
+      } else {
+        if (state.conversationId === message?.conversationId) {
+          state.messages.push(message);
+        }
       }
     },
   },

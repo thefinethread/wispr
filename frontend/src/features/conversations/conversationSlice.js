@@ -42,9 +42,12 @@ const conversationSlice = createSlice({
 
       state.conversations = data;
     },
-    updateConversationList: (state, action) => {
+
+    prependConversation: (state, action) => {
+      const { message } = action.payload;
+
       const index = state.conversations.findIndex(
-        (c) => c?._id === action.payload?.conversationId,
+        (c) => c?._id === message?.conversationId,
       );
       if (index !== -1) {
         const conversation = state.conversations[index];
@@ -54,11 +57,26 @@ const conversationSlice = createSlice({
         // updated the last message of the conversation
         state.conversations.unshift({
           ...conversation,
-          lastMessage: action.payload.text,
-          lastMessageTime: action.payload.createdAt,
+          lastMessage: message.text,
+          lastMessageTime: message.createdAt,
         });
       }
     },
+
+    prependNewConversation: (state, action) => {
+      const { message, otherUser } = action.payload;
+
+      state.conversations.unshift({
+        _id: message?.conversationId,
+        lastMessage: message?.text || "",
+        lastMessageTime: message?.createdAt || "",
+        otherUserId: otherUser?._id,
+        otherUserName: otherUser?.username,
+        otherUserOnline: otherUser?.online,
+        otherUserProfilePic: otherUser?.profilePic,
+      });
+    },
+
     updateConversationDetail: (state, action) => {
       const { _id, ...rest } = action.payload;
 
@@ -93,6 +111,7 @@ export const {
   startTyping,
   stopTyping,
   getAllConversations,
-  updateConversationList,
+  prependConversation,
+  prependNewConversation,
   updateConversationDetail,
 } = conversationSlice.actions;

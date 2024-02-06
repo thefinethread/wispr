@@ -14,7 +14,10 @@ import socket from "../../config/socketConfig";
 import { useGetConversationQuery } from "../../features/conversations/conversationApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { newMessage } from "../../features/messages/messageSlice";
-import { updateConversationList } from "../../features/conversations/conversationSlice";
+import {
+  prependConversation,
+  prependNewConversation,
+} from "../../features/conversations/conversationSlice";
 
 const typingStatus = {
   typing: true,
@@ -68,9 +71,20 @@ const ChatFooter = () => {
 
       clearTimeout(timeout);
       timeoutFunction();
+
       socket.emit("send-message", message, (data) => {
         dispatch(newMessage(data));
-        dispatch(updateConversationList(data));
+
+        if (data?.newChat) {
+          dispatch(
+            prependNewConversation({
+              message: data?.message,
+              otherUser: currentConversation?.otherUser,
+            }),
+          );
+        } else {
+          dispatch(prependConversation(data));
+        }
       });
       setText("");
     }

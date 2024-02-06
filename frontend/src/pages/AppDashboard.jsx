@@ -9,13 +9,15 @@ import {
   startTyping,
   stopTyping,
   updateConversationDetail,
-  updateConversationList,
+  prependConversation,
+  prependNewConversation,
 } from "../features/conversations/conversationSlice";
 import { updateOtherUserInCurrentConversation } from "../features/app/appSlice";
 
 const AppDashboard = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
+  const { currentConversation } = useSelector((state) => state.app);
 
   useEffect(() => {
     socket.connect(); // manually connecting to socket once authenticated
@@ -41,7 +43,17 @@ const AppDashboard = () => {
 
     socket.on("receive-message", (data) => {
       dispatch(newMessage(data));
-      dispatch(updateConversationList(data));
+
+      if (data?.newChat) {
+        dispatch(
+          prependNewConversation({
+            message: data?.message,
+            otherUser: currentConversation?.otherUser,
+          }),
+        );
+      } else {
+        dispatch(prependConversation(data));
+      }
     });
 
     socket.on("start-typing", ({ senderId, text }) =>

@@ -1,15 +1,39 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FaArrowLeft } from "react-icons/fa6";
 import IconButton from "../../commonComponents/IconButton";
 import { RiSearchLine } from "react-icons/ri";
 import UserImg from "../../assets/images/user.jpg";
 import { useSearchUserMutation } from "../../features/user/usersApiSlice";
 import Spinner from "../../commonComponents/Spinners/Spinner";
+import { setCurrentConversation } from "../../features/app/appSlice";
 
 const AddNewChat = ({ isOpen, closeAddNewChat }) => {
   const [users, setUsers] = useState(null);
   const [query, setQuery] = useState("");
   const [searchUser, { isLoading, data }] = useSearchUserMutation();
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.auth);
+
+  const handleStartNewConversation = ({ _id, username, profilePhoto }) => {
+    dispatch(
+      setCurrentConversation({
+        _id: null,
+        currentUser: {
+          _id: currentUser?._id,
+          username: currentUser?.username,
+          profilePic: currentUser?.profilePic,
+        },
+        otherUser: {
+          _id,
+          username,
+          profilePic: profilePhoto,
+        },
+      }),
+    );
+
+    closeAddNewChat();
+  };
 
   useEffect(() => {
     let timeoutId;
@@ -55,7 +79,13 @@ const AddNewChat = ({ isOpen, closeAddNewChat }) => {
 
       <div className="my-4 px-4">
         {users
-          ? users?.map((user) => <UserCard key={user?._id} {...user} />)
+          ? users?.map((user) => (
+              <UserCard
+                onClick={() => handleStartNewConversation(user)}
+                key={user?._id}
+                {...user}
+              />
+            ))
           : query && (
               <p className="text-center text-zinc-400">
                 No results found for '{query}'
@@ -72,8 +102,11 @@ const CustomSpinner = () => (
   </div>
 );
 
-const UserCard = ({ _id, profilePhoto, username }) => (
-  <div className="h-18 flex cursor-pointer items-center gap-6 rounded-md border-b border-solid border-zinc-200 py-3 transition-colors last:border-0 hover:bg-zinc-100">
+const UserCard = ({ _id, profilePhoto, username, onClick }) => (
+  <div
+    onClick={onClick}
+    className="h-18 flex cursor-pointer items-center gap-6 rounded-md border-b border-solid border-zinc-200 py-3 transition-colors last:border-0 hover:bg-zinc-100"
+  >
     <img
       className="h-11 w-11 rounded-full object-cover"
       src={profilePhoto || UserImg}
