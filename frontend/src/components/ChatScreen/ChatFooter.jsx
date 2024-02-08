@@ -16,6 +16,7 @@ import {
   prependNewConversation,
 } from "../../features/conversations/conversationSlice";
 import SocketContext from "../../context/socketContext";
+import IconButton from "../../commonComponents/IconButton";
 
 const typingStatus = {
   typing: true,
@@ -93,9 +94,9 @@ const ChatFooter = () => {
   return (
     <section className="flex h-16 w-full items-center justify-between gap-2 px-3">
       <ul className="flex items-center gap-1">
-        <ChatIconStyled icon={FaImage} />
-        <ChatIconStyled icon={FaNoteSticky} />
-        <ChatIconStyled icon={RiFileGifFill} iconSize="1.2rem" />
+        <IconButton icon={FaImage} />
+        <IconButton icon={FaNoteSticky} />
+        <IconButton icon={RiFileGifFill} iconSize="1.2rem" />
       </ul>
       <div className="relative flex-1">
         <input
@@ -104,12 +105,12 @@ const ChatFooter = () => {
           value={text}
           type="text"
           placeholder="Aa"
-          className="h-full w-full rounded-full bg-zinc-100 px-4 py-2 outline-none placeholder:text-zinc-600"
+          className="bg-skin-secondary placeholder:text-skin-secondary h-full w-full rounded-full px-4 py-2 text-skin-base text-opacity-80 outline-none"
         />
-        <ChatIconStyled icon={FaFaceSmile} className="absolute right-0 top-0" />
+        {/* <IconButton icon={FaFaceSmile} className="absolute right-0 top-0" /> */}
       </div>
-      <ChatIconStyled icon={FaMicrophone} />
-      <ChatIconStyled
+      <IconButton icon={FaMicrophone} />
+      <IconButton
         icon={RiSendPlaneFill}
         className=" rotate-45"
         iconSize="1.2rem"

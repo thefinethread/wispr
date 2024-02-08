@@ -77,7 +77,7 @@ const AppDashboard = () => {
   }, [socket]);
 
   return (
-    <main className="flex h-screen w-full text-sm font-normal dark:bg-neutral-900">
+    <main className="flex h-screen w-full bg-skin-primary text-sm font-normal text-skin-base text-opacity-85">
       <ConversationsPanel />
       <ChatScreen />
     </main>

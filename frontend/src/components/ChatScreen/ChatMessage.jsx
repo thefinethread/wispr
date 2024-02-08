@@ -3,6 +3,7 @@ import ChatIconStyled from "../../commonComponents/styledComponents/MainChatScre
 import { FaEllipsisVertical, FaRegFaceSmile } from "react-icons/fa6";
 import NoProfilePic from "../../assets/images/no-profile-photo.png";
 import { useDispatch, useSelector } from "react-redux";
+import IconButton from "../../commonComponents/IconButton";
 
 const ChatMessage = ({ text, senderId, createdAt, updatedAt, _id }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -33,24 +34,26 @@ const ChatMessage = ({ text, senderId, createdAt, updatedAt, _id }) => {
             isMyText(senderId) ? "flex-row-reverse" : ""
           }`}
         >
-          <ChatIconStyled
+          <IconButton
             icon={FaRegFaceSmile}
-            color="text-zinc-400"
+            iconColor="text-skin-muted"
             bgHoverSize="h-6 w-6"
-            iconSize="1rem"
+            size="1rem"
           />
-          <ChatIconStyled
+          <IconButton
             icon={FaEllipsisVertical}
-            color="text-zinc-400"
+            iconColor="text-skin-muted"
             bgHoverSize="h-6 w-6"
-            iconSize="1rem"
+            size="1rem"
           />
         </ul>
       )}
 
       <p
         className={`max-w-[50%] rounded-[18px] px-3 py-2 ${
-          isMyText(senderId) ? "bg-skin-primary text-white" : "bg-zinc-100"
+          isMyText(senderId)
+            ? "bg-skin-accent text-skin-base"
+            : "bg-skin-secondary"
         }`}
       >
         {text}

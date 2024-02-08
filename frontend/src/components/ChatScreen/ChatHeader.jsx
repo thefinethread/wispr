@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMemo } from "react";
 import ImageWithOnlineIcon from "../../commonComponents/ImageWithOnlineIcon";
+import IconButton from "../../commonComponents/IconButton";
 
 const ChatHeader = ({ openChatInfo }) => {
   const { typing } = useSelector((state) => state.conversationReducer);
@@ -18,14 +19,14 @@ const ChatHeader = ({ openChatInfo }) => {
   // );
 
   return (
-    <div className="flex h-14 w-full items-center justify-between bg-white pl-1 pr-2 shadow">
-      <div className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-zinc-100">
+    <div className="border-skin-primary flex h-14 w-full items-center justify-between border-b border-solid pl-1 pr-2">
+      <div className="hover:bg-skin-secondary flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition-colors">
         <ImageWithOnlineIcon
           imgSize="h-10 w-10"
           imgSrc={currentConversation?.otherUser?.profilePic}
           isOnline={currentConversation?.otherUser?.online}
         />
-        <div className="flex flex-col justify-center font-normal">
+        <div className="flex flex-col justify-center font-normal text-skin-base">
           <span className="text-base leading-tight">
             {currentConversation?.otherUser?.username}
           </span>
@@ -37,9 +38,9 @@ const ChatHeader = ({ openChatInfo }) => {
         </div>
       </div>
       <ul className="flex items-center gap-2">
-        <ChatIconStyled icon={FaPhone} />
-        <ChatIconStyled icon={FaVideo} iconSize="1.2rem" />
-        <ChatIconStyled icon={FaEllipsis} onClick={openChatInfo} />
+        <IconButton icon={FaPhone} />
+        <IconButton icon={FaVideo} iconSize="1.2rem" />
+        <IconButton icon={FaEllipsis} onClick={openChatInfo} />
       </ul>
     </div>
   );

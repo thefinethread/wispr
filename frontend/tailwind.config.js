@@ -17,14 +17,23 @@ module.exports = {
       },
       textColor: {
         skin: {
-          primary: withOpacity("--color-primary"),
+          secondary: withOpacity("--color-text-secondary"),
           base: withOpacity("--color-text-base"),
           muted: withOpacity("--color-text-muted"),
+          accent: withOpacity("--color-accent"),
         },
       },
+
       backgroundColor: {
         skin: {
-          primary: withOpacity("--color-primary"),
+          primary: withOpacity("--color-bg-primary"),
+          secondary: withOpacity("--color-bg-secondary"),
+          accent: withOpacity("--color-accent"),
+        },
+      },
+      borderColor: {
+        skin: {
+          primary: withOpacity("--color-border-primary"),
         },
       },
     },

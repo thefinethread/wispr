@@ -3,8 +3,8 @@ const IconButton = ({
   icon: Icon,
   onClick,
   size = "1.2rem",
-  iconColor = "text-white",
-  hoverBgColor = "hover:bg-zinc-300/40",
+  iconColor = "text-skin-primary",
+  hoverBgColor = "hover:bg-skin-secondary",
 }) => {
   return (
     <button

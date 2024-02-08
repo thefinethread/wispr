@@ -13,7 +13,7 @@ const ChatScreen = () => {
   const openChatInfo = () => setIsChatInfoOpen((prev) => !prev);
 
   return (
-    <section className="flex h-full flex-1">
+    <section className="text-skin-accent flex h-full flex-1 text-opacity-85">
       {currentConversation ? (
         <>
           <section className="flex h-full flex-1 flex-col">

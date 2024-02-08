@@ -50,8 +50,9 @@ const ChatCard = ({
   return (
     <div
       onClick={handleCurrentConversation}
-      className={`hover flex h-[72px] w-full cursor-pointer items-center justify-between gap-2 rounded-lg px-3 py-3 transition-colors hover:bg-zinc-100 ${
-        currentConversation?._id === _id ? "bg-zinc-300/40" : ""
+      className={`hover bg-skin-secondary flex h-[72px] w-full cursor-pointer items-center justify-between gap-2 rounded-lg px-3 py-3 transition-colors hover:bg-opacity-60 ${
+        // currentConversation?._id === _id ? "bg-zinc-300/40" : "
+        2
       }`}
     >
       <div className="flex h-full flex-1 items-center  gap-2 overflow-hidden">
@@ -64,7 +65,7 @@ const ChatCard = ({
           <div className="text-base font-normal leading-tight">
             {otherUserName}
           </div>
-          <div className="flex overflow-hidden text-[13px] font-normal text-zinc-500">
+          <div className="text-skin-secondary flex overflow-hidden text-[13px] font-normal">
             <p
               className={`min-w-0  flex-1 overflow-hidden text-ellipsis whitespace-nowrap`}
             >

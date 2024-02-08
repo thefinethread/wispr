@@ -15,7 +15,7 @@ const ConversationsPanel = () => {
   const closeAddNewChat = () => setIsAddNewChatOpen(false);
 
   return (
-    <section className="relative flex w-[400px] flex-col border-r border-solid border-zinc-300">
+    <section className="border-skin-primary relative flex w-[400px] flex-col border-r border-solid">
       {isProfileSliderOpen && (
         <UserProfile
           isOpen={isProfileSliderOpen}

@@ -23,9 +23,9 @@ const TopHeader = ({ openProfileSlider, openAddNewChat }) => {
           <IconButton
             onClick={openAddNewChat}
             icon={RiChatNewLine}
-            iconColor="text-zinc-800"
+            // iconColor="text-zinc-800"
           />
-          <IconButton icon={RiMore2Fill} iconColor="text-zinc-800" />
+          <IconButton icon={RiMore2Fill} />
         </ul>
       </nav>
       <div className="flex w-full justify-center py-2">
@@ -36,11 +36,11 @@ const TopHeader = ({ openProfileSlider, openAddNewChat }) => {
           /> */}
           <RiSearchLine
             size="1.1rem"
-            className="absolute left-3 top-0 translate-y-[calc(16px_-_50%)] text-zinc-600"
+            className="absolute left-3 top-0 translate-y-[calc(16px_-_50%)] text-skin-muted"
           />
           <input
             type="text"
-            className="h-8 w-full rounded-md bg-zinc-100 pl-14 outline-none placeholder:text-zinc-500 focus:placeholder:opacity-0"
+            className="bg-skin-secondary h-8 w-full rounded-md pl-14 text-skin-base text-opacity-85 outline-none placeholder:text-skin-muted "
             placeholder="Search Wispr"
           />
         </div>

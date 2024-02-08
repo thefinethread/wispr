@@ -105,11 +105,11 @@ const UserProfile = ({ isOpen, closeProfileSlider }) => {
 
   return (
     <div
-      className={`absolute top-0 z-10 flex h-full w-full flex-col items-center bg-white transition-all ${
+      className={`absolute top-0 z-10 flex h-full w-full flex-col items-center bg-skin-primary transition-all ${
         isOpen ? "left-0" : "-left-full"
       } `}
     >
-      <header className="flex h-20 w-full items-center gap-5 bg-skin-primary px-4 text-lg text-white">
+      <header className="bg-skin-accent flex h-20 w-full items-center gap-5 bg-opacity-85 px-4 text-lg">
         <IconButton
           icon={FaArrowLeft}
           onClick={closeProfileSlider}
@@ -125,7 +125,7 @@ const UserProfile = ({ isOpen, closeProfileSlider }) => {
             alt=""
           />
 
-          <div className="absolute bottom-0 right-0 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-skin-primary">
+          <div className="bg-skin-accent absolute bottom-0 right-0 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full">
             <RiCameraLine size="1.2rem" className="text-white" />
           </div>
         </div>
@@ -135,7 +135,7 @@ const UserProfile = ({ isOpen, closeProfileSlider }) => {
         {userDetails.map((el) => (
           <li
             key={el.id}
-            className="flex h-[74px] items-center gap-6 border-b border-solid border-zinc-100 last:border-none"
+            className="border-skin-primary flex h-[74px] items-center gap-6 border-b border-solid last:border-none"
           >
             <el.icon size={el.iconSize} className={`text-zinc-400`} />
             <div className="flex-1">
@@ -147,9 +147,9 @@ const UserProfile = ({ isOpen, closeProfileSlider }) => {
                 type="text"
                 value={el.value}
                 readOnly={!el.isEditMode}
-                className={`w-full text-base outline-none ${
+                className={`w-full bg-transparent text-base outline-none ${
                   el.isEditMode &&
-                  "border-b-[1.5px] border-solid border-zinc-300"
+                  "border-skin-primary border-b-[1.5px] border-solid"
                 }`}
               />
             </div>
@@ -158,13 +158,13 @@ const UserProfile = ({ isOpen, closeProfileSlider }) => {
                 id={el.id}
                 onClick={el.handleUpdate}
                 icon={FaCheck}
-                iconColor="text-skin-primary"
+                iconColor="text-skin-accent"
               />
             ) : (
               <IconButton
                 onClick={el.handleEditMode}
                 icon={RiPencilLine}
-                iconColor="text-skin-primary"
+                iconColor="text-skin-accent"
               />
             )}
           </li>

@@ -50,8 +50,8 @@ const AddNewChat = ({ isOpen, closeAddNewChat }) => {
   useEffect(() => () => setQuery(""), []);
 
   return (
-    <div className="absolute z-10 h-full w-full flex-col items-center bg-white">
-      <header className="flex h-20 w-full items-center gap-5 bg-skin-primary px-4 text-lg text-white">
+    <div className="absolute z-10 h-full w-full flex-col items-center bg-skin-primary">
+      <header className="bg-skin-accent flex h-20 w-full items-center gap-5 bg-opacity-85 px-4 text-lg">
         <IconButton
           icon={FaArrowLeft}
           onClick={closeAddNewChat}
@@ -70,7 +70,7 @@ const AddNewChat = ({ isOpen, closeAddNewChat }) => {
             value={query}
             autoFocus={true}
             type="text"
-            className="h-9 w-full rounded-md bg-zinc-100 px-14 outline-none placeholder:text-zinc-500"
+            className="bg-skin-secondary h-9 w-full rounded-md px-14 text-skin-base text-opacity-85 outline-none placeholder:text-skin-muted"
             placeholder="Search username or email"
           />
           {isLoading && <CustomSpinner />}
@@ -105,7 +105,7 @@ const CustomSpinner = () => (
 const UserCard = ({ _id, profilePhoto, username, onClick }) => (
   <div
     onClick={onClick}
-    className="h-18 flex cursor-pointer items-center gap-6 rounded-md border-b border-solid border-zinc-200 py-3 transition-colors last:border-0 hover:bg-zinc-100"
+    className="h-18 border-skin-primary hover:bg-skin-secondary flex cursor-pointer items-center gap-6 rounded-md border-b border-solid bg-skin-primary py-3 pl-2 transition-colors last:border-0"
   >
     <img
       className="h-11 w-11 rounded-full object-cover"

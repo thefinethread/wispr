@@ -32,7 +32,7 @@ const ChatMessagesList = () => {
   }, [typing]);
 
   return (
-    <div className="w-full flex-1 items-end overflow-hidden px-3">
+    <div className="w-full flex-1 items-end overflow-hidden px-3 text-skin-base text-opacity-85">
       <ul className="relative flex h-full w-full flex-col-reverse overflow-y-auto">
         {!messages ? (
           <Spinner color="border-zinc-400" size="h-7 w-7" className=" m-auto" />
