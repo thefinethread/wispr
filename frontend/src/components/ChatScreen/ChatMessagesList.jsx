@@ -1,9 +1,9 @@
 import ChatMessage from "./ChatMessage";
 import Spinner from "../../commonComponents/Spinners/Spinner";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getMessages } from "../../features/messages/messageSlice";
-import socket from "../../config/socketConfig";
+import SocketContext from "../../context/socketContext";
 
 const ChatMessagesList = () => {
   const [typing, setTyping] = useState("");
@@ -11,11 +11,13 @@ const ChatMessagesList = () => {
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.messageReducer);
   const { currentConversation } = useSelector((state) => state.app);
+
   const typingRef = useRef();
 
+  const { socket } = useContext(SocketContext);
+
   useEffect(() => {
-    console.log(currentConversation?._id);
-    socket.emit(
+    socket?.emit(
       "get-messages",
       { conversationId: currentConversation?._id },
       (data) =>
@@ -23,7 +25,7 @@ const ChatMessagesList = () => {
           getMessages({ data, conversationId: currentConversation?._id }),
         ),
     );
-  }, [currentConversation?._id]);
+  }, [currentConversation?._id, socket]);
 
   useEffect(() => {
     typingRef.current?.scrollIntoView({ behavior: "smooth" });

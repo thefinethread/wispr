@@ -13,6 +13,7 @@ const messageSlice = createSlice({
       state.messages = action.payload.data;
       state.conversationId = action.payload.conversationId;
     },
+
     newMessage: (state, action) => {
       const { message, newChat } = action.payload;
 

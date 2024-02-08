@@ -7,17 +7,15 @@ import {
 import EmojiPicker from "emoji-picker-react";
 import { RiSendPlaneFill, RiFileGifFill } from "react-icons/ri";
 import ChatIconStyled from "../../commonComponents/styledComponents/MainChatScreen/ChatIconStyled";
-import { useEffect, useState } from "react";
-import { useSendMessageMutation } from "../../features/messages/messagesApiSlice";
-import { useParams } from "react-router-dom";
-import socket from "../../config/socketConfig";
-import { useGetConversationQuery } from "../../features/conversations/conversationApiSlice";
+import { useContext, useEffect, useState } from "react";
+// import socket from "../../config/socketConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { newMessage } from "../../features/messages/messageSlice";
 import {
   prependConversation,
   prependNewConversation,
 } from "../../features/conversations/conversationSlice";
+import SocketContext from "../../context/socketContext";
 
 const typingStatus = {
   typing: true,
@@ -29,6 +27,8 @@ const ChatFooter = () => {
   const dispatch = useDispatch();
 
   const { currentConversation } = useSelector((state) => state.app);
+
+  const { socket } = useContext(SocketContext);
 
   let typing = false;
   let timeout = undefined;

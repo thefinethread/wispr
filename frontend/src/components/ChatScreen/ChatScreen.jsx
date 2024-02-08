@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import ChatHeader from "./ChatHeader";
 import ChatMessages from "./ChatMessagesList";
 import ChatFooter from "./ChatFooter";

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   FaArrowLeft,
   FaCheck,
@@ -7,13 +7,16 @@ import {
 } from "react-icons/fa6";
 import { RiCameraLine, RiInformationLine, RiPencilLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import socket from "../../config/socketConfig";
+// import socket from "../../config/socketConfig";
 import { updateUserInfo } from "../../features/auth/authSlice";
 import IconButton from "../../commonComponents/IconButton";
+import SocketContext from "../../context/socketContext";
 
 const UserProfile = ({ isOpen, closeProfileSlider }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
+
+  const { socket } = useContext(SocketContext);
 
   const usernameRef = useRef();
   const aboutRef = useRef();

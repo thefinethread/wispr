@@ -1,7 +1,6 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import ChatScreen from "../components/ChatScreen/ChatScreen";
 import ConversationsPanel from "../components/Conversations/ConversationsPanel";
-import socket from "../config/socketConfig";
 import { newMessage } from "../features/messages/messageSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,18 +12,26 @@ import {
   prependNewConversation,
 } from "../features/conversations/conversationSlice";
 import { updateOtherUserInCurrentConversation } from "../features/app/appSlice";
+import SocketContext from "../context/socketContext";
 
 const AppDashboard = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
   const { currentConversation } = useSelector((state) => state.app);
 
-  useEffect(() => {
-    socket.connect(); // manually connecting to socket once authenticated
+  const { socket, initializeSocket, disconnectSocket } =
+    useContext(SocketContext);
 
-    socket.on("connect", () => {
-      console.log("connected - ", socket.id);
-    });
+  useEffect(() => {
+    if (!socket) initializeSocket();
+
+    return () => disconnectSocket();
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("connect", () => console.log("connected - ", socket.id));
 
     socket.on("active-status", (data) => {
       dispatch(updateConversationDetail(data));
@@ -42,6 +49,7 @@ const AppDashboard = () => {
     });
 
     socket.on("receive-message", (data) => {
+      console.log(data);
       dispatch(newMessage(data));
 
       if (data?.newChat) {
@@ -66,14 +74,10 @@ const AppDashboard = () => {
       dispatch(updateConversationDetail(data));
       dispatch(updateOtherUserInCurrentConversation(data));
     });
-
-    return () => {
-      socket.disconnect(); // disconnect socket once user leaves the component
-    };
-  }, []);
+  }, [socket]);
 
   return (
-    <main className="flex h-screen w-full text-sm font-normal">
+    <main className="flex h-screen w-full text-sm font-normal dark:bg-neutral-900">
       <ConversationsPanel />
       <ChatScreen />
     </main>
