@@ -7,10 +7,12 @@
 
 @layer base {
   :root {
-    --color-text-base: 0, 200, 0;
+    --color-text-base: 0, 0, 0;
     --color-text-muted: 113, 113, 122;
+    --color-text-inverted: 255, 255, 255;
     --color-bg-primary: 255, 255, 255;
-    --color-bg-secondary: 100, 100, 100;
+    --color-hover-bg-primary: 248, 248, 248;
+    --color-bg-secondary: 240, 240, 240;
     --color-border-primary: 212, 212, 216;
     --color-accent: 0, 132, 255;
     /* --color-accent: 141, 195, 246; */
@@ -21,6 +23,7 @@
   :root[data-theme="dark"] {
     --color-text-base: 255, 255, 255;
     --color-text-secondary: 170, 170, 170;
+    --color-text-inverted: 230, 230, 230;
     --color-text-muted: 113, 113, 122;
     --color-bg-primary: 20, 22, 22;
     --color-bg-secondary: 40, 40, 40;

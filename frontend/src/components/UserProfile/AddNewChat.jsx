@@ -51,7 +51,7 @@ const AddNewChat = ({ isOpen, closeAddNewChat }) => {
 
   return (
     <div className="absolute z-10 h-full w-full flex-col items-center bg-skin-primary">
-      <header className="bg-skin-accent flex h-20 w-full items-center gap-5 bg-opacity-85 px-4 text-lg">
+      <header className="bg-skin-accent text-skin-inverted flex h-20 w-full items-center gap-5 bg-opacity-85 px-4 text-lg">
         <IconButton
           icon={FaArrowLeft}
           onClick={closeAddNewChat}

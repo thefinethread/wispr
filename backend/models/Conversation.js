@@ -4,8 +4,11 @@ const conversationSchema = new mongoose.Schema(
   {
     members: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        lastViewed: { type: Date, default: mongoose.now() },
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
       },
     ],
     messages: [

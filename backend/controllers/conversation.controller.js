@@ -12,13 +12,13 @@ const { default: mongoose } = require('mongoose');
 const createConversation = asyncHandler(async (req, res) => {
   const { members } = req.body;
 
-  if (members?.length < 2) {
+  if (!members?.length) {
     res.status(400);
-    throw new Error('At least two members are required');
+    throw new Error('At least one member is required');
   }
 
   const conversation = await Conversation.create({
-    members: [...members, req?.user?._id],
+    members: [...members, { userId: req?.user?._id }],
   });
 
   if (conversation) {

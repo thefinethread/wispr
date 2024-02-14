@@ -52,7 +52,7 @@ const ChatMessage = ({ text, senderId, createdAt, updatedAt, _id }) => {
       <p
         className={`max-w-[50%] rounded-[18px] px-3 py-2 ${
           isMyText(senderId)
-            ? "bg-skin-accent text-skin-base"
+            ? "bg-skin-accent text-skin-inverted"
             : "bg-skin-secondary"
         }`}
       >

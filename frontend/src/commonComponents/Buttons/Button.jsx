@@ -1,4 +1,4 @@
-const primaryStyles = `bg-skin-primary bg-opacity-80 transition-opacity hover:bg-opacity-100`;
+const primaryStyles = `bg-skin-accent bg-opacity-80 transition-opacity hover:bg-opacity-100`;
 const secondaryStyles = `outline outline-1 outline-zinc-200 text-zinc-500 hover:bg-zinc-50 transition-colors`;
 
 const Button = ({

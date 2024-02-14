@@ -36,11 +36,11 @@ const TopHeader = ({ openProfileSlider, openAddNewChat }) => {
           /> */}
           <RiSearchLine
             size="1.1rem"
-            className="absolute left-3 top-0 translate-y-[calc(16px_-_50%)] text-skin-muted"
+            className="absolute left-3 top-0 translate-y-[calc(18px_-_50%)] text-skin-muted"
           />
           <input
             type="text"
-            className="bg-skin-secondary h-8 w-full rounded-md pl-14 text-skin-base text-opacity-85 outline-none placeholder:text-skin-muted "
+            className="bg-skin-secondary h-9 w-full rounded-md pl-14 text-skin-base text-opacity-85 outline-none placeholder:text-skin-muted "
             placeholder="Search Wispr"
           />
         </div>
