@@ -64,12 +64,12 @@ const getAllConversations = asyncHandler(async (_id, cb) => {
      * less than message.createdAt time for new messages,
      * then only returning max 5 unread messages if there are any and also the last message details
      *  */
-    const msgCount = messages.reduce(
+    const unreadMessageCount = messages.reduce(
       (acc, curr) => (curr.createdAt > lastViewed ? acc + 1 : acc),
       0
     );
     return {
-      unreadMessageCount: msgCount > 5 ? '5+' : msgCount.toString(),
+      unreadMessageCount,
       lastMessage: messages[0],
     };
   };
@@ -82,4 +82,21 @@ const getAllConversations = asyncHandler(async (_id, cb) => {
   cb(list);
 });
 
-module.exports = { getAllConversations };
+const updateLastViewedOfAConversation = asyncHandler(
+  async ({ conversationId, currentUserId, otherUserId }, cb, io) => {
+    const conversation = await Conversation.findById(conversationId);
+
+    const index = conversation?.members?.findIndex(
+      (member) => member?.userId?.toString() === currentUserId
+    );
+
+    if (index !== -1) {
+      conversation.members[index].lastViewed = new Date();
+    }
+    const updatedConversation = await conversation.save();
+
+    cb(updatedConversation);
+  }
+);
+
+module.exports = { getAllConversations, updateLastViewedOfAConversation };

@@ -23,22 +23,18 @@ const conversationSlice = createSlice({
         (el) => el?.senderId !== action.payload,
       );
     },
-    getAllConversations: (state, action) => {
-      const data = action.payload?.map((conversation) => {
-        const otherUser = conversation.members?.filter(
-          (member) => member?._id !== currentUser?._id,
-        )?.[0];
 
-        return {
-          _id: conversation._id,
-          lastMessage: conversation.messages?.[0]?.text || "",
-          lastMessageTime: conversation.messages?.[0]?.createdAt || "",
-          otherUserId: otherUser?._id,
-          otherUserName: otherUser?.username,
-          otherUserOnline: otherUser?.online,
-          otherUserProfilePic: otherUser?.profilePhoto,
-        };
-      });
+    getAllConversations: (state, action) => {
+      const data = action.payload?.map((conversation) => ({
+        _id: conversation._id,
+        lastMessage: conversation.messages?.lastMessage?.text || "",
+        lastMessageTime: conversation.messages?.lastMessage?.createdAt || "",
+        unreadMessageCount: conversation.messages?.unreadMessageCount || 0,
+        otherUserId: conversation?.otherMember?._id,
+        otherUserName: conversation?.otherMember?.username,
+        otherUserOnline: conversation?.otherMember?.online,
+        otherUserProfilePic: conversation?.otherMember?.profilePhoto,
+      }));
 
       state.conversations = data;
     },
@@ -88,11 +84,11 @@ const conversationSlice = createSlice({
         username: "otherUserName",
         profilePhoto: "otherUserProfilePic",
         online: "otherUserOnline",
+        unreadMessageCount: "unreadMessageCount",
       };
 
       if (index !== -1) {
         const conversation = { ...state.conversations[index] };
-
         Object.keys(rest).forEach((key) => {
           const stateFieldName = fieldsMapping[key];
 
@@ -102,6 +98,8 @@ const conversationSlice = createSlice({
         state.conversations.splice(index, 1, conversation);
       }
     },
+
+    resetUnreadMessageCount: (state, action) => {},
   },
 });
 

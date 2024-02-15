@@ -4,7 +4,10 @@ const { verifyJwt } = require('../middlewares/authMiddleware');
 const User = require('../models/User');
 const Conversation = require('../models/Conversation');
 const { sendMessage, getMessages } = require('./messages');
-const { getAllConversations } = require('./conversations');
+const {
+  getAllConversations,
+  updateLastViewedOfAConversation,
+} = require('./conversations');
 const { updateSocketIdAndOnlineStatus } = require('./users');
 
 let users = new Map();
@@ -70,6 +73,11 @@ const socketServer = (server) => {
 
     // send message
     socket.on('send-message', (data, cb) => sendMessage({ ...data }, cb, io));
+
+    // update last viewed of the user in a conversation - used in knowing new/unread messages
+    socket.on('update-last-viewed', (data, cb) =>
+      updateLastViewedOfAConversation({ ...data }, cb, io)
+    );
 
     socket.on('typing', ({ receiverId, senderId, text }) => {
       io.to(users.get(receiverId)?.socketId).emit('start-typing', {

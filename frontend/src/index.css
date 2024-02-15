@@ -25,9 +25,10 @@
     --color-text-secondary: 170, 170, 170;
     --color-text-inverted: 230, 230, 230;
     --color-text-muted: 113, 113, 122;
+    --color-hover-bg-primary: 35, 35, 35;
     --color-bg-primary: 20, 22, 22;
     --color-bg-secondary: 40, 40, 40;
-    --color-accent: 0, 132, 255;
+    --color-accent: 0, 105, 202;
     --color-border-primary: 45, 45, 45;
     /* --color-accent: 141, 195, 246; */
     --color-chat-accent: 0, 132, 255;
